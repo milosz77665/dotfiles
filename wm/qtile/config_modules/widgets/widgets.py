@@ -1,0 +1,101 @@
+from libqtile.lazy import lazy
+from qtile_extras import widget
+from qtile_extras.popup.templates.mpris2 import DEFAULT_LAYOUT
+from qtile_extras.widget import modify
+
+from ..variables import (
+    FONT,
+    FONTSIZE,
+    PADDING,
+    DISK_APP,
+    UPDATE_INTERVAL,
+    BACKLIGHT_NAME,
+    BACKLIGHT_STEP,
+    BAR_BACKGROUND,
+    BAR_FOREGROUND,
+)
+from .custom.BatteryWidget import BatteryWidget
+from .custom.BluetoothWidget import BluetoothWidget
+from .custom.WlanWidget import WlanWidget
+from .custom.VolumeWidget import VolumeWidget
+from .decorations.pill import pill_deco
+
+
+widget_defaults = dict(
+    font=FONT,
+    fontsize=FONTSIZE,
+    padding=PADDING,
+    background=BAR_BACKGROUND,
+    foreground=BAR_FOREGROUND,
+)
+extension_defaults = widget_defaults.copy()
+
+
+def get_widget_list():
+    return [
+        widget.DF(
+            format=" {uf}{m}",
+            visible_on_warn=False,
+            update_inteval=UPDATE_INTERVAL,
+            mouse_callbacks={"Button1": lazy.spawn(DISK_APP)},
+            **pill_deco,
+        ),
+        widget.ThermalSensor(
+            format=" {temp:.0f}{unit}", update_inteval=UPDATE_INTERVAL, **pill_deco
+        ),
+        widget.Memory(
+            measure_mem="G",
+            update_inteval=UPDATE_INTERVAL,
+            format=" {MemUsed:.1f}{mm}/{MemTotal:.1f}{mm}",
+            **pill_deco,
+        ),
+        widget.Memory(
+            measure_swap="G",
+            update_inteval=UPDATE_INTERVAL,
+            format="󰾴 {SwapUsed:.1f}G/{SwapTotal:.1f}G",
+            **pill_deco,
+        ),
+        widget.CPU(
+            format=" {load_percent}%", update_inteval=UPDATE_INTERVAL, **pill_deco
+        ),
+        widget.Mpris2(
+            name="music_player",
+            popup_layout=DEFAULT_LAYOUT,
+            width=300,
+            scroll=True,
+            scroll_interval=0.1,
+            scroll_repeat=True,
+            mouse_callbacks={"Button1": lazy.widget["music_player"].toggle_player()},
+            **pill_deco,
+        ),
+        widget.Spacer(),
+        widget.GroupBox(
+            margin_y=3,
+            margin_x=0,
+            padding_y=5,
+            padding_x=3,
+            borderwidth=2,
+            active=BAR_FOREGROUND,
+            inactive=BAR_FOREGROUND + "80",
+            highlight_method="line",
+            rounded=True,
+            this_current_screen_border=BAR_FOREGROUND,
+            this_screen_border=BAR_FOREGROUND,
+            other_current_screen_border=BAR_BACKGROUND,
+            other_screen_border=BAR_BACKGROUND,
+            **pill_deco,
+        ),
+        widget.CurrentLayout(scale=0.6, **pill_deco),
+        widget.Spacer(),
+        widget.Systray(),
+        widget.Backlight(
+            format="󰃚 {percent:" + f"{BACKLIGHT_STEP}" + "%}",
+            backlight_name=BACKLIGHT_NAME,
+            **pill_deco,
+        ),
+        modify(BluetoothWidget, **pill_deco),
+        modify(WlanWidget, **pill_deco),
+        modify(VolumeWidget, **pill_deco),
+        modify(BatteryWidget, **pill_deco),
+        widget.Clock(format="%d %b %H:%M", **pill_deco),
+    ]
