@@ -45,8 +45,8 @@ def autostart():
         else:
             subprocess.Popen(["feh", "--bg-fill", DEFAULT_WALLPAPER_PATH])
 
-    # Pywal
-    subprocess.Popen(["wal", "-i", DEFAULT_WALLPAPER_PATH])
+            # Pywal
+            subprocess.Popen(["wal", "-i", DEFAULT_WALLPAPER_PATH])
 
     # Picom
     if os.environ.get("XDG_SESSION_TYPE") != "wayland":
