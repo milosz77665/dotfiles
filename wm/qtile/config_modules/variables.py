@@ -18,10 +18,8 @@ TOUCHPAD_NAME = "Microsoft Surface Type Cover Touchpad"
 GROUPS = [Group(i) for i in "1234"]
 
 # Wallpaper
-DEFAULT_WALLPAPER_PATH = os.path.expanduser(
-    "~/Obrazy/Wallpapers/stars-2179083-1920.jpg"
-)
-WALLPAPER_DIR = os.path.expanduser("~/Obrazy/Wallpapers")
+DEFAULT_WALLPAPER_PATH = os.path.expanduser("~/wallpapers/stars-2179083-1920.jpg")
+WALLPAPER_DIR = os.path.expanduser("~/wallpapers")
 
 # Window
 WINDOWS_MARGIN = 12
