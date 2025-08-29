@@ -30,10 +30,10 @@ def autostart():
     subprocess.Popen(["dunst"])
 
     # Networks
-    subprocess.Popen(["nm-applet"])
+    # subprocess.Popen(["nm-applet"])
 
     # Bluetooth
-    subprocess.Popen(["blueman-applet"])
+    # subprocess.Popen(["blueman-applet"])
 
     # Policy Agent
     subprocess.Popen(["/usr/lib/policykit-1-gnome/polkit-gnome-authentication-agent-1"])
