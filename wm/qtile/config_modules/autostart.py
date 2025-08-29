@@ -30,10 +30,10 @@ def autostart():
     subprocess.Popen(["dunst"])
 
     # Networks
-    # subprocess.Popen(["nm-applet"])
+    subprocess.Popen(["nm-applet"])
 
     # Bluetooth
-    # subprocess.Popen(["blueman-applet"])
+    subprocess.Popen(["blueman-applet"])
 
     # Policy Agent
     subprocess.Popen(["/usr/lib/policykit-1-gnome/polkit-gnome-authentication-agent-1"])
@@ -50,7 +50,8 @@ def autostart():
 
     # Picom
     if os.environ.get("XDG_SESSION_TYPE") != "wayland":
-        subprocess.Popen(["picom", "-b"])
+        subprocess.Popen(["pkill", "picom"])
+        subprocess.Popen(["picom", "--backend", "glx", "--vsync", "-b"])
 
     # Screensaver
     subprocess.Popen(["xscreensaver", "-no-splash"])
