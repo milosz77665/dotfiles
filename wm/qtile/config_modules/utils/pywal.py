@@ -1,6 +1,6 @@
 import json
 import os
-from variables import FALLBACK_COLORS
+from ..variables import FALLBACK_COLORS
 
 
 def load_pywal_colors():
