@@ -50,7 +50,32 @@ PILL_RADIUS = 20
 PILL_LINE_WIDTH = 0
 
 # Colors
+FALLBACK_COLORS = [
+    {
+        "color0": "#fff",
+        "color1": "#fff",
+        "color2": "#fff",
+        "color3": "#fff",
+        "color4": "#fff",
+        "color5": "#fff",
+        "color6": "#fff",
+        "color7": "#fff",
+        "color8": "#fff",
+        "color9": "#fff",
+        "color10": "#fff",
+        "color11": "#fff",
+        "color12": "#fff",
+        "color13": "#fff",
+        "color14": "#fff",
+        "color15": "#000",
+    },
+    {
+        "foreground": "#fff",
+        "background": "#000",
+    },
+]
 colors, special_colors = load_pywal_colors()
+
 
 WINDOW_BORDER_FOCUS_COLOR = special_colors["foreground"]
 WINDOW_BORDER_NORMAL_COLOR = special_colors["background"]
