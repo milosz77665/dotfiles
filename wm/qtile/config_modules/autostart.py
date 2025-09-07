@@ -36,7 +36,10 @@ def autostart():
     # subprocess.Popen(["blueman-applet"])
 
     # Policy Agent
-    subprocess.Popen(["/usr/lib/policykit-1-gnome/polkit-gnome-authentication-agent-1"])
+    if os.path.exists("/usr/lib/policykit-1-gnome/polkit-gnome-authentication-agent-1"):
+        subprocess.Popen(
+            ["/usr/lib/policykit-1-gnome/polkit-gnome-authentication-agent-1"]
+        )
 
     # Wallpaper
     if os.path.exists(DEFAULT_WALLPAPER_PATH):
