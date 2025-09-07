@@ -12,7 +12,7 @@ def load_pywal_colors():
             colors_data = json.load(f)
         return colors_data["colors"], colors_data["special"]
     else:
-        return (
+        return [
             {
                 "color0": "#fff",
                 "color1": "#fff",
@@ -35,4 +35,4 @@ def load_pywal_colors():
                 "foreground": "#fff",
                 "background": "#000",
             },
-        )
+        ]
