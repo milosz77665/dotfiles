@@ -2,11 +2,14 @@ from libqtile.lazy import lazy
 from qtile_extras import widget
 from qtile_extras.popup.templates.mpris2 import DEFAULT_LAYOUT
 from qtile_extras.widget import modify
+from qtile_extras.widget.groupbox2 import GroupBox2
 
 from ..variables import (
     FONT,
     FONTSIZE,
+    GROUPS_CIRCLES_SIZE,
     PADDING,
+    GROUPS_PADDING,
     DISK_APP,
     UPDATE_INTERVAL,
     BACKLIGHT_NAME,
@@ -19,6 +22,7 @@ from .custom.BluetoothWidget import BluetoothWidget
 from .custom.WlanWidget import WlanWidget
 from .custom.VolumeWidget import VolumeWidget
 from .decorations.pill import pill_deco
+from .decorations.groups_circles import rules
 
 
 widget_defaults = dict(
@@ -69,22 +73,7 @@ def get_widget_list():
             **pill_deco,
         ),
         widget.Spacer(),
-        widget.GroupBox(
-            margin_y=3,
-            margin_x=0,
-            padding_y=5,
-            padding_x=3,
-            borderwidth=2,
-            active=BAR_FOREGROUND,
-            inactive=BAR_FOREGROUND + "80",
-            highlight_method="line",
-            rounded=True,
-            this_current_screen_border=BAR_FOREGROUND,
-            this_screen_border=BAR_FOREGROUND,
-            other_current_screen_border=BAR_BACKGROUND,
-            other_screen_border=BAR_BACKGROUND,
-            **pill_deco,
-        ),
+        GroupBox2(fontsize=GROUPS_CIRCLES_SIZE, padding_x=GROUPS_PADDING, rules=rules),
         widget.CurrentLayout(scale=0.6, **pill_deco),
         widget.Spacer(),
         widget.Backlight(

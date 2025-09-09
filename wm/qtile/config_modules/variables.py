@@ -15,22 +15,24 @@ NOTES = "joplin"
 MONITOR_CONFIG = os.path.expanduser("~/.screenlayout/monitor_config.sh")
 
 # Groups
-GROUPS = [Group(i) for i in "1234"]
+GROUPS = [Group(i) for i in "123456"]
 
 # Wallpaper
 DEFAULT_WALLPAPER_PATH = os.path.expanduser("~/wallpapers/mountains.jpg")
 WALLPAPER_DIR = os.path.expanduser("~/wallpapers")
 
 # Window
-WINDOWS_MARGIN = 12
-WINDOWS_BORDER = 3
+WINDOWS_MARGIN = 8
+WINDOWS_BORDER = 2
 
 # Widgets
-BAR_HEIGHT = 40
-BAR_MARGIN = [10, 15, 0, 15]
+BAR_HEIGHT = 25
+BAR_MARGIN = [5, 10, 0, 10]
 FONT = "Hack Nerd Font"
-FONTSIZE = 18
-PADDING = 8
+FONTSIZE = 16
+GROUPS_CIRCLES_SIZE = 20
+PADDING = 12
+GROUPS_PADDING = 6
 BACKLIGHT_NAME = "intel_backlight"
 BACKLIGHT_STEP = 2.0
 WLAN_INTERFACE = "wlp1s0"
@@ -46,7 +48,7 @@ WLAN_TURN_ON = "nmcli radio wifi on"
 WLAN_TURN_OFF = "nmcli radio wifi off"
 
 # Pill Decoration
-PILL_RADIUS = 20
+PILL_RADIUS = 8
 PILL_LINE_WIDTH = 0
 
 # Colors
@@ -77,15 +79,3 @@ TOOLTIP_DEFAULTS = [
     ("tooltip_fontsize", 18, "Font size for tooltop"),
     ("tooltip_padding", 15, "int for all sides or list for [top/bottom, left/right]"),
 ]
-
-
-# fix
-#     def _stop_tooltip(self, x, y):
-#         if self._tooltip_timer:
-#             self._tooltip_timer.cancel()
-#             self._tooltip_timer = None
-
-#         if self._tooltip:
-#             self._tooltip.hide()
-#             self._tooltip.kill()
-#             self._tooltip = None
