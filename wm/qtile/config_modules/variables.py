@@ -61,6 +61,10 @@ BAR_FOREGROUND = colors["color0"]
 BLUETOOTH_COLOR = "#0082FC"
 PILL_COLOR = colors["color15"]
 PILL_LINE_COLOR = "#000"
+GROUPS_ACTIVE_COLOR = colors["color15"]
+GROUPS_OCCUPIED_COLOR = colors["color2"]
+GROUPS_EMPTY_COLOR = colors["color2"]
+GROUPS_OTHER_SCREEN_COLOR = colors["color14"]
 
 # Tooltip
 TOOLTIP_DEFAULTS = [

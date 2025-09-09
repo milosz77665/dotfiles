@@ -1,6 +1,11 @@
 from qtile_extras.widget.groupbox2 import GroupBoxRule
 
-from ...variables import colors
+from ...variables import (
+    GROUPS_ACTIVE_COLOR,
+    GROUPS_OCCUPIED_COLOR,
+    GROUPS_EMPTY_COLOR,
+    GROUPS_OTHER_SCREEN_COLOR,
+)
 
 
 def circles(rule, box):
@@ -15,10 +20,12 @@ def circles(rule, box):
 
 rules = [
     GroupBoxRule().when(func=circles),
-    GroupBoxRule(text_colour=colors["color15"]).when(
+    GroupBoxRule(text_colour=GROUPS_ACTIVE_COLOR).when(
         focused=True, screen=GroupBoxRule.SCREEN_THIS
     ),
-    GroupBoxRule(text_colour=colors["color2"]).when(occupied=True, focused=False),
-    GroupBoxRule(text_colour=colors["color2"]).when(occupied=False),
-    GroupBoxRule(text_colour=colors["color14"]).when(screen=GroupBoxRule.SCREEN_OTHER),
+    GroupBoxRule(text_colour=GROUPS_OCCUPIED_COLOR).when(occupied=True, focused=False),
+    GroupBoxRule(text_colour=GROUPS_EMPTY_COLOR).when(occupied=False),
+    GroupBoxRule(text_colour=GROUPS_OTHER_SCREEN_COLOR).when(
+        screen=GroupBoxRule.SCREEN_OTHER
+    ),
 ]
