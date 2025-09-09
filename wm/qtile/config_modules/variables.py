@@ -12,7 +12,7 @@ TEXT_EDITOR = "gnome-text-editor"
 NOTES = "joplin"
 
 # Autostart
-TOUCHPAD_NAME = "Microsoft Surface Type Cover Touchpad"
+MONITOR_CONFIG = os.path.expanduser("~/.screenlayout/monitor_config.sh")
 
 # Groups
 GROUPS = [Group(i) for i in "1234"]

@@ -3,28 +3,18 @@ import os
 import subprocess
 from libqtile.log_utils import logger
 
-from .variables import DEFAULT_WALLPAPER_PATH, TOUCHPAD_NAME
-from .utils.touchpad import get_touchpad_id
+from .variables import DEFAULT_WALLPAPER_PATH, MONITOR_CONFIG
+from .utils.touchpad import configure_touchpad
 
 
 @hook.subscribe.startup_once
 def autostart():
-    touchpad_id = get_touchpad_id(TOUCHPAD_NAME)
+    # Configure Monitors
+    if os.path.exists(MONITOR_CONFIG):
+        subprocess.call([MONITOR_CONFIG])
 
-    if touchpad_id:
-        # Enable touchpad tapping
-        subprocess.Popen(
-            ["xinput", "set-prop", touchpad_id, "libinput Tapping Enabled", "1"]
-        )
-
-        # Disable mouse middle button
-        subprocess.Popen(
-            ["xinput", "set-button-map", touchpad_id, "1", "0", "3", "4", "5", "6", "7"]
-        )
-    else:
-        logger.error(
-            f"Nie znaleziono touchpada o nazwie zawierającej: '{TOUCHPAD_NAME}'"
-        )
+    # Touchpad configuration
+    configure_touchpad()
 
     # Notification Deamon
     subprocess.Popen(["dunst"])

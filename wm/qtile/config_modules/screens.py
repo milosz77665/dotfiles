@@ -22,4 +22,12 @@ screens = [
         # This variable is set to None (no cap) by default, but you can set it to 60 to indicate that you limit it to 60 events per second
         # x11_drag_polling_rate = 60,
     ),
+    Screen(
+        top=bar.Bar(
+            get_widget_list(),
+            BAR_HEIGHT,
+            background=BAR_BACKGROUND,
+            margin=BAR_MARGIN,
+        ),
+    ),
 ]

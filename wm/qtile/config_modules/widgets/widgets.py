@@ -87,7 +87,6 @@ def get_widget_list():
         ),
         widget.CurrentLayout(scale=0.6, **pill_deco),
         widget.Spacer(),
-        widget.Systray(),
         widget.Backlight(
             format="󰃚 {percent:" + f"{BACKLIGHT_STEP}" + "%}",
             backlight_name=BACKLIGHT_NAME,
