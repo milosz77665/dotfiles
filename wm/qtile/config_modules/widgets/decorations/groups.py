@@ -9,6 +9,7 @@ from ...variables import (
 
 
 def circles(rule, box):
+    rule.text = "●"
     if box.focused:
         rule.text = "◉"
     elif box.occupied:
@@ -18,8 +19,19 @@ def circles(rule, box):
     return True
 
 
-rules = [
+circles_rules = [
     GroupBoxRule().when(func=circles),
+    GroupBoxRule(text_colour=GROUPS_ACTIVE_COLOR).when(
+        focused=True, screen=GroupBoxRule.SCREEN_THIS
+    ),
+    GroupBoxRule(text_colour=GROUPS_OCCUPIED_COLOR).when(occupied=True, focused=False),
+    GroupBoxRule(text_colour=GROUPS_EMPTY_COLOR).when(occupied=False),
+    GroupBoxRule(text_colour=GROUPS_OTHER_SCREEN_COLOR).when(
+        screen=GroupBoxRule.SCREEN_OTHER
+    ),
+]
+
+numbers_rules = [
     GroupBoxRule(text_colour=GROUPS_ACTIVE_COLOR).when(
         focused=True, screen=GroupBoxRule.SCREEN_THIS
     ),

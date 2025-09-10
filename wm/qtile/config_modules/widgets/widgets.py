@@ -22,7 +22,7 @@ from .custom.BluetoothWidget import BluetoothWidget
 from .custom.WlanWidget import WlanWidget
 from .custom.VolumeWidget import VolumeWidget
 from .decorations.pill import pill_deco
-from .decorations.groups_circles import rules
+from .decorations.groups import numbers_rules, circles_rules
 
 
 widget_defaults = dict(
@@ -73,7 +73,9 @@ def get_widget_list():
             **pill_deco,
         ),
         widget.Spacer(),
-        GroupBox2(fontsize=GROUPS_CIRCLES_SIZE, padding_x=GROUPS_PADDING, rules=rules),
+        GroupBox2(
+            fontsize=GROUPS_CIRCLES_SIZE, padding_x=GROUPS_PADDING, rules=numbers_rules
+        ),
         widget.CurrentLayout(scale=0.6, **pill_deco),
         widget.Spacer(),
         widget.Backlight(
