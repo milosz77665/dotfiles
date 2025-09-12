@@ -35,10 +35,10 @@ widget_defaults = dict(
 extension_defaults = widget_defaults.copy()
 
 
-def get_widget_list():
+def get_widget_list(is_primary=False):
     return [
         widget.DF(
-            format=" {uf}{m}",
+            format="  {uf}{m}",
             visible_on_warn=False,
             update_inteval=UPDATE_INTERVAL,
             mouse_callbacks={"Button1": lazy.spawn(DISK_APP)},
@@ -50,7 +50,7 @@ def get_widget_list():
         widget.Memory(
             measure_mem="G",
             update_inteval=UPDATE_INTERVAL,
-            format=" {MemUsed:.1f}{mm}/{MemTotal:.1f}{mm}",
+            format="󰫗  {MemUsed:.1f}{mm}/{MemTotal:.1f}{mm}",
             **pill_deco,
         ),
         widget.Memory(
@@ -60,12 +60,12 @@ def get_widget_list():
             **pill_deco,
         ),
         widget.CPU(
-            format=" {load_percent}%", update_inteval=UPDATE_INTERVAL, **pill_deco
+            format="  {load_percent}%", update_inteval=UPDATE_INTERVAL, **pill_deco
         ),
         widget.Mpris2(
             name="music_player",
             popup_layout=DEFAULT_LAYOUT,
-            width=300,
+            width=100,
             scroll=True,
             scroll_interval=0.1,
             scroll_repeat=True,
@@ -74,10 +74,13 @@ def get_widget_list():
         ),
         widget.Spacer(),
         GroupBox2(
-            fontsize=GROUPS_CIRCLES_SIZE, padding_x=GROUPS_PADDING, rules=numbers_rules
+            fontsize=GROUPS_CIRCLES_SIZE,
+            padding_x=GROUPS_PADDING,
+            rules=numbers_rules,
         ),
         widget.CurrentLayout(scale=0.6, **pill_deco),
         widget.Spacer(),
+        (widget.Systray() if is_primary else widget.Spacer(length=0)),
         widget.Backlight(
             format="󰃚 {percent:" + f"{BACKLIGHT_STEP}" + "%}",
             backlight_name=BACKLIGHT_NAME,
@@ -87,5 +90,5 @@ def get_widget_list():
         modify(WlanWidget, **pill_deco),
         modify(VolumeWidget, **pill_deco),
         modify(BatteryWidget, **pill_deco),
-        widget.Clock(format="%d %b %H:%M", **pill_deco),
+        widget.Clock(format="%d / %m / %y  %H:%M:%S", **pill_deco),
     ]

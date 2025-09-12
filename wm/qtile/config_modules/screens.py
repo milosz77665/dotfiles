@@ -12,7 +12,7 @@ from .widgets.widgets import get_widget_list
 screens = [
     Screen(
         top=bar.Bar(
-            get_widget_list(),
+            get_widget_list(is_primary=True),
             BAR_HEIGHT,
             background=BAR_BACKGROUND,
             margin=BAR_MARGIN,

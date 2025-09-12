@@ -9,7 +9,7 @@ TERMINAL = "alacritty"
 BROWSER = "brave-browser"
 CODE_EDITOR = "code"
 TEXT_EDITOR = "gnome-text-editor"
-NOTES = "joplin"
+NOTES = "obsidian"
 
 # Autostart
 MONITOR_CONFIG = os.path.expanduser("~/.screenlayout/monitor_config.sh")
@@ -22,12 +22,12 @@ DEFAULT_WALLPAPER_PATH = os.path.expanduser("~/wallpapers/mountains.jpg")
 WALLPAPER_DIR = os.path.expanduser("~/wallpapers")
 
 # Window
-WINDOWS_MARGIN = 8
-WINDOWS_BORDER = 2
+WINDOWS_MARGIN = 3
+WINDOWS_BORDER = 3
 
 # Widgets
 BAR_HEIGHT = 25
-BAR_MARGIN = [5, 10, 0, 10]
+BAR_MARGIN = [5, 5, 0, 5]
 FONT = "Hack Nerd Font"
 FONTSIZE = 16
 GROUPS_CIRCLES_SIZE = 20
@@ -61,9 +61,9 @@ BAR_FOREGROUND = colors["color0"]
 BLUETOOTH_COLOR = "#0082FC"
 PILL_COLOR = colors["color15"]
 PILL_LINE_COLOR = "#000"
-GROUPS_ACTIVE_COLOR = colors["color15"]
+GROUPS_ACTIVE_COLOR = colors["color14"]
 GROUPS_OCCUPIED_COLOR = colors["color2"]
-GROUPS_EMPTY_COLOR = colors["color2"]
+GROUPS_EMPTY_COLOR = colors["color0"]
 GROUPS_OTHER_SCREEN_COLOR = colors["color14"]
 
 # Tooltip
