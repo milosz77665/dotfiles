@@ -31,7 +31,10 @@ from config_modules.variables import MOD as mod, GROUPS as groups
 from config_modules.autostart import autostart
 from config_modules.keybindings import keys, mouse
 from config_modules.layouts import layouts
-from config_modules.widgets.widgets import widget_defaults, extension_defaults
+from config_modules.widgets.widgets_modern import (
+    widget_defaults,
+    extension_defaults,
+)
 from config_modules.screens import screens
 
 

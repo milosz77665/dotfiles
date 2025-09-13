@@ -6,7 +6,9 @@ from .variables import (
     BAR_MARGIN,
     BAR_BACKGROUND,
 )
-from .widgets.widgets import get_widget_list
+
+# from .widgets.widgets_modern import get_widget_list
+from .widgets.widgets_retro import get_widget_list
 
 
 screens = [

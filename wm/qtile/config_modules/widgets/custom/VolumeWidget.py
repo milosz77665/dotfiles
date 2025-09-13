@@ -22,11 +22,11 @@ class VolumeWidget(base.ThreadPoolText, TooltipMixin):
 
     def _get_wifi_icon(self, volume):
         if volume == 0:
-            return ""
+            return " "
         elif volume <= 50:
-            return ""
+            return " "
         else:
-            return ""
+            return " "
 
     def poll(self):
         try:

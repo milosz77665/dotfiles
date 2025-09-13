@@ -76,15 +76,15 @@ class WlanWidget(base.ThreadPoolText, TooltipMixin):
 
     def _get_wifi_icon(self, strength):
         if strength == 0:
-            return "󰤯"
+            return " 󰤯 "
         elif strength < 40:
-            return "󰤟"
+            return " 󰤟 "
         elif strength < 70:
-            return "󰤢"
+            return " 󰤢 "
         elif strength < 90:
-            return "󰤥"
+            return " 󰤥 "
         else:
-            return "󰤨"
+            return " 󰤨 "
 
     def poll(self):
         self.is_enabled = self._get_wifi_status()

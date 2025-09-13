@@ -8,6 +8,26 @@ from ...variables import (
 )
 
 
+def retro_numbers_label(rule, box):
+    label = ""
+    group = box.group
+    name = group.name
+    count = len(group.windows)
+
+    screen = group.screen.index if group.screen else None
+
+    label += f"[{name}]" if box.focused else name
+
+    if count > 0:
+        label += f"<span rise='6000' size='small'>{count}</span>"
+
+    if screen is not None:
+        label += f"<span rise='-6000' size='small'>{screen}</span>"
+
+    rule.text = label
+    return True
+
+
 def circles(rule, box):
     rule.text = "●"
     if box.focused:
@@ -30,6 +50,19 @@ circles_rules = [
         screen=GroupBoxRule.SCREEN_OTHER
     ),
 ]
+
+retro_numbers_rules = [
+    GroupBoxRule().when(func=retro_numbers_label),
+    GroupBoxRule(text_colour=GROUPS_ACTIVE_COLOR).when(
+        focused=True, screen=GroupBoxRule.SCREEN_THIS
+    ),
+    GroupBoxRule(text_colour=GROUPS_OCCUPIED_COLOR).when(occupied=True, focused=False),
+    GroupBoxRule(text_colour=GROUPS_EMPTY_COLOR).when(occupied=False),
+    GroupBoxRule(text_colour=GROUPS_OTHER_SCREEN_COLOR).when(
+        screen=GroupBoxRule.SCREEN_OTHER
+    ),
+]
+
 
 numbers_rules = [
     GroupBoxRule(text_colour=GROUPS_ACTIVE_COLOR).when(
