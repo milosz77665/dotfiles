@@ -66,15 +66,6 @@ def get_widget_list(is_primary=False):
             padding=PADDING + 2,
             update_inteval=UPDATE_INTERVAL,
         ),
-        widget.Mpris2(
-            name="music_player",
-            popup_layout=DEFAULT_LAYOUT,
-            width=70,
-            scroll=True,
-            scroll_interval=0.1,
-            scroll_repeat=True,
-            mouse_callbacks={"Button1": lazy.widget["music_player"].toggle_player()},
-        ),
         widget.Spacer(),
         GroupBox2(
             padding_x=GROUPS_PADDING,
@@ -84,6 +75,15 @@ def get_widget_list(is_primary=False):
         widget.CurrentLayout(scale=0.6),
         widget.Spacer(),
         (widget.Systray() if is_primary else widget.Spacer(length=0)),
+        widget.Mpris2(
+            name="music_player",
+            popup_layout=DEFAULT_LAYOUT,
+            width=100,
+            scroll=True,
+            scroll_interval=0.1,
+            scroll_repeat=True,
+            mouse_callbacks={"Button1": lazy.widget["music_player"].toggle_player()},
+        ),
         widget.Backlight(
             format=" 󰃚 {percent:" + f"{BACKLIGHT_STEP}" + "%}",
             backlight_name=BACKLIGHT_NAME,
