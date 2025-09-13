@@ -3,7 +3,6 @@ from libqtile.lazy import lazy
 from libqtile.log_utils import logger
 import subprocess
 from qtile_extras.widget.mixins import TooltipMixin
-import time
 
 from ...variables import AUDIO_APP, TOOLTIP_DEFAULTS
 

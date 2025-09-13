@@ -38,25 +38,34 @@ extension_defaults = widget_defaults.copy()
 def get_widget_list(is_primary=False):
     return [
         widget.DF(
-            format="MEM:{uf}{m}",
+            format=" {uf}{m}",
+            padding=PADDING + 2,
             visible_on_warn=False,
             update_inteval=UPDATE_INTERVAL,
             mouse_callbacks={"Button1": lazy.spawn(DISK_APP)},
         ),
         widget.ThermalSensor(
-            format="TEMP:{temp:.0f}{unit}", update_inteval=UPDATE_INTERVAL
+            format=" {temp:.0f}{unit}",
+            padding=PADDING + 2,
+            update_inteval=UPDATE_INTERVAL,
         ),
         widget.Memory(
+            format="󰫗 {MemUsed:.1f}{mm}/{MemTotal:.1f}{mm}",
+            padding=PADDING + 2,
             measure_mem="G",
             update_inteval=UPDATE_INTERVAL,
-            format="RAM:{MemUsed:.1f}{mm}/{MemTotal:.1f}{mm}",
         ),
         widget.Memory(
+            format="󰾴 {SwapUsed:.1f}G/{SwapTotal:.1f}G",
+            padding=PADDING + 2,
             measure_swap="G",
             update_inteval=UPDATE_INTERVAL,
-            format="SWP:{SwapUsed:.1f}G/{SwapTotal:.1f}G",
         ),
-        widget.CPU(format="CPU:{load_percent}%", update_inteval=UPDATE_INTERVAL),
+        widget.CPU(
+            format=" {load_percent}%",
+            padding=PADDING + 2,
+            update_inteval=UPDATE_INTERVAL,
+        ),
         widget.Mpris2(
             name="music_player",
             popup_layout=DEFAULT_LAYOUT,
@@ -80,7 +89,7 @@ def get_widget_list(is_primary=False):
             backlight_name=BACKLIGHT_NAME,
         ),
         modify(BluetoothWidget),
-        modify(WlanWidget),
+        modify(WlanWidget, padding=PADDING + 5),
         modify(VolumeWidget),
         modify(BatteryWidget),
         widget.Clock(format="%d/%m/%y  %H:%M:%S"),
