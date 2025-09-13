@@ -13,6 +13,7 @@ NOTES = "obsidian"
 
 # Widget common variables
 WLAN_INTERFACE = "wlo1"  # ifconfig
+THERMAL_SENSOR_TAG = "Core 0"
 DISK_APP = "baobab"
 WLAN_APP = "nm-connection-editor"
 BLUETOOTH_APP = "blueman-manager"

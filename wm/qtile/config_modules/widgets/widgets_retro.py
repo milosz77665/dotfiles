@@ -16,6 +16,7 @@ from ..variables import (
     BACKLIGHT_STEP,
     BAR_BACKGROUND,
     BAR_FOREGROUND,
+    THERMAL_SENSOR_TAG,
 )
 from .custom.BatteryWidget import BatteryWidget
 from .custom.BluetoothWidget import BluetoothWidget
@@ -45,6 +46,7 @@ def get_widget_list(is_primary=False):
             mouse_callbacks={"Button1": lazy.spawn(DISK_APP)},
         ),
         widget.ThermalSensor(
+            tag_sensor=THERMAL_SENSOR_TAG,
             format=" {temp:.0f}{unit}",
             padding=PADDING + 2,
             update_inteval=UPDATE_INTERVAL,

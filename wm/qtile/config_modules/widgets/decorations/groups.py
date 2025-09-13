@@ -16,6 +16,15 @@ def retro_numbers_label(rule, box):
 
     screen = group.screen.index if group.screen else None
 
+    if screen == 0:
+        screen = "A"
+    elif screen == 1:
+        screen = "B"
+    elif screen == 2:
+        screen = "C"
+    elif screen == 3:
+        screen = "D"
+
     label += f"[{name}]" if box.focused else name
 
     if count > 0:
