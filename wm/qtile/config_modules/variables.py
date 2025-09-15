@@ -1,4 +1,4 @@
-from libqtile.config import Group
+from libqtile.config import Group, Match
 import os
 from .utils.pywal import load_pywal_colors
 
@@ -28,7 +28,23 @@ BACKLIGHT_NAME = "intel_backlight"
 MONITOR_CONFIG = os.path.expanduser("~/.screenlayout/monitor_config.sh")
 
 # Groups
-GROUPS = [Group(i) for i in "123456"]
+GROUPS = [
+    Group("1", matches=[Match(wm_class="code")]),
+    Group("2", matches=[Match(wm_class="Alacritty")]),
+    Group(
+        "3",
+        matches=[
+            Match(wm_class="brave-browser"),
+            Match(wm_class="google-chrome"),
+            Match(wm_class="firefox_firefox"),
+        ],
+    ),
+    Group(
+        "4", matches=[Match(wm_class="obsidian"), Match(wm_class="gnome-text-editor")]
+    ),
+    Group("5", matches=[Match(wm_class="code")]),
+    Group("6", matches=[Match(wm_class="spotify"), Match(wm_class="steam")]),
+]
 
 # Wallpaper
 DEFAULT_WALLPAPER_PATH = os.path.expanduser("~/wallpapers/mountains.jpg")
