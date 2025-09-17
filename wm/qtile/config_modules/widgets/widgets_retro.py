@@ -94,5 +94,5 @@ def get_widget_list(is_primary=False):
         modify(WlanWidget, padding=PADDING + 5),
         modify(VolumeWidget),
         modify(BatteryWidget),
-        widget.Clock(format="%d/%m/%y  %H:%M:%S"),
+        widget.Clock(format="%d/%m/%y %H:%M:%S"),
     ]

@@ -22,6 +22,7 @@ keys = [
     Key([MOD], "z", lazy.spawn(CODE_EDITOR), desc="Launch Code Editor"),
     Key([MOD], "a", lazy.spawn(TEXT_EDITOR), desc="Launch Text Editor"),
     Key([MOD], "s", lazy.spawn(NOTES), desc="Launch Notes"),
+    Key([MOD], "p", lazy.spawn("arandr"), desc="Launch Arandr"),
     #############################
     ####### Function Keys #######
     #############################
