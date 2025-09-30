@@ -7,7 +7,6 @@ from qtile_extras.widget.groupbox2 import GroupBox2
 from ..variables import (
     FONT,
     FONTSIZE,
-    GROUPS_CIRCLES_SIZE,
     PADDING,
     GROUPS_PADDING,
     DISK_APP,
@@ -22,8 +21,8 @@ from .custom.BatteryWidget import BatteryWidget
 from .custom.BluetoothWidget import BluetoothWidget
 from .custom.WlanWidget import WlanWidget
 from .custom.VolumeWidget import VolumeWidget
-from .decorations.pill import pill_deco
-from .decorations.groups import numbers_rules, circles_rules, retro_numbers_rules
+from .custom.CalendarPopup import toggle_calendar_popup
+from .decorations.groups import retro_numbers_rules
 
 
 widget_defaults = dict(
@@ -76,7 +75,6 @@ def get_widget_list(is_primary=False):
         ),
         widget.CurrentLayout(scale=0.6),
         widget.Spacer(),
-        (widget.Systray() if is_primary else widget.Spacer(length=0)),
         widget.Mpris2(
             name="music_player",
             popup_layout=DEFAULT_LAYOUT,
@@ -86,6 +84,7 @@ def get_widget_list(is_primary=False):
             scroll_repeat=True,
             mouse_callbacks={"Button1": lazy.widget["music_player"].toggle_player()},
         ),
+        (widget.Systray() if is_primary else widget.Spacer(length=0)),
         widget.Backlight(
             format=" 󰃚 {percent:" + f"{BACKLIGHT_STEP}" + "%}",
             backlight_name=BACKLIGHT_NAME,
@@ -94,5 +93,8 @@ def get_widget_list(is_primary=False):
         modify(WlanWidget, padding=PADDING + 5),
         modify(VolumeWidget),
         modify(BatteryWidget),
-        widget.Clock(format="%d/%m/%y %H:%M:%S"),
+        widget.Clock(
+            format="%d/%m/%y %H:%M:%S",
+            mouse_callbacks={"Button1": lazy.function(toggle_calendar_popup)},
+        ),
     ]

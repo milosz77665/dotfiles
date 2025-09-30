@@ -5,6 +5,7 @@ from libqtile.utils import guess_terminal
 
 from .utils.feh import change_wallpaper
 from .variables import MOD, TERMINAL, BROWSER, CODE_EDITOR, TEXT_EDITOR, NOTES, GROUPS
+from .widgets.custom.CalendarPopup import toggle_calendar_popup
 
 
 if not TERMINAL:
@@ -23,6 +24,12 @@ keys = [
     Key([MOD], "a", lazy.spawn(TEXT_EDITOR), desc="Launch Text Editor"),
     Key([MOD], "s", lazy.spawn(NOTES), desc="Launch Notes"),
     Key([MOD], "p", lazy.spawn("arandr"), desc="Launch Arandr"),
+    Key(
+        ["control", "mod1"],
+        "c",
+        lazy.function(toggle_calendar_popup),
+        desc="Toggle calendar",
+    ),
     #############################
     ####### Function Keys #######
     #############################

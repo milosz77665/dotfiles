@@ -21,6 +21,7 @@ from .custom.BatteryWidget import BatteryWidget
 from .custom.BluetoothWidget import BluetoothWidget
 from .custom.WlanWidget import WlanWidget
 from .custom.VolumeWidget import VolumeWidget
+from .custom.CalendarPopup import toggle_calendar_popup
 from .decorations.pill import pill_deco
 from .decorations.groups import numbers_rules, circles_rules
 
@@ -90,5 +91,9 @@ def get_widget_list(is_primary=False):
         modify(WlanWidget, **pill_deco),
         modify(VolumeWidget, **pill_deco),
         modify(BatteryWidget, **pill_deco),
-        widget.Clock(format="%d / %m / %y  %H:%M:%S", **pill_deco),
+        widget.Clock(
+            format="%d / %m / %y  %H:%M:%S",
+            mouse_callbacks={"Button1": lazy.function(toggle_calendar_popup)},
+            **pill_deco,
+        ),
     ]
