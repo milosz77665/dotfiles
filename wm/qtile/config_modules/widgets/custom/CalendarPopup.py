@@ -1,6 +1,6 @@
 import calendar
 from datetime import datetime, date
-from qtile_extras.popup import PopupRelativeLayout, PopupText
+from qtile_extras.popup import PopupText, PopupAbsoluteLayout
 from ...variables import BAR_BACKGROUND, BAR_FOREGROUND
 
 EN_MONTHS = [
@@ -69,22 +69,42 @@ class CalendarPopup:
         return text, color
 
     def _create_layout(self, qtile):
-        """(Re)build whole popup for current displayed_month/displayed_year."""
         self.qtile = qtile
         controls = []
 
         weeks = self._get_month_days(self.displayed_year, self.displayed_month)
         rows_count = len(weeks)
 
+        padding_x = 10
+        padding_y = 15
+        margin = 15
+        bigger_margin = 25
+
+        header_height = 20
+        weekdays_height = 10
+        week_row_height = 10
+        popup_height = (
+            (rows_count - 1) * (week_row_height + margin)
+            + 2 * padding_y
+            + 2 * bigger_margin
+            + header_height
+            + weekdays_height
+            + week_row_height
+        )
+
+        popup_width = 220
+        button_width = 35
+        month_year_title_width = popup_width - 2 * button_width
+
         month_name = EN_MONTHS[self.displayed_month]
         controls.append(
             PopupText(
                 name="month_year_title",
                 text=f"{month_name} {self.displayed_year}",
-                pos_x=0,
-                pos_y=0,
-                width=1,
-                height=0.1,
+                pos_x=button_width,
+                pos_y=padding_y,
+                width=month_year_title_width,
+                height=header_height,
                 fontsize=14,
                 h_align="center",
                 foreground=self.COLOR_FOREGROUND,
@@ -95,10 +115,10 @@ class CalendarPopup:
             PopupText(
                 name="prev_month_btn",
                 text="",
-                pos_x=0.0,
-                pos_y=0.15,
-                width=0.15,
-                height=0.1,
+                pos_x=padding_x,
+                pos_y=padding_y,
+                width=button_width,
+                height=header_height,
                 fontsize=14,
                 h_align="center",
                 foreground=self.COLOR_FOREGROUND,
@@ -114,10 +134,10 @@ class CalendarPopup:
             PopupText(
                 name="next_month_btn",
                 text="",
-                pos_x=0.85,
-                pos_y=0.15,
-                width=0.15,
-                height=0.1,
+                pos_x=popup_width - padding_x - button_width,
+                pos_y=padding_y,
+                width=button_width,
+                height=header_height,
                 fontsize=14,
                 h_align="center",
                 foreground=self.COLOR_FOREGROUND,
@@ -136,17 +156,15 @@ class CalendarPopup:
                 PopupText(
                     name=f"wd_{i}",
                     text=wd,
-                    pos_x=i * (1.0 / 7.0),
-                    pos_y=0.3,
-                    width=1.0 / 7.0,
-                    height=0.1,
+                    pos_x=padding_x + i * ((popup_width - 2 * padding_x) / 7.0),
+                    pos_y=padding_y + bigger_margin + header_height,
+                    width=(popup_width - 2 * padding_x) / 7,
+                    height=weekdays_height,
                     h_align="center",
                     foreground=self.COLOR_FOREGROUND,
                 )
             )
 
-        start_y = 0.4
-        cell_h = 0.1
         for r, week in enumerate(weeks):
             for c, day in enumerate(week):
                 text, color = self._day_text(day)
@@ -154,23 +172,23 @@ class CalendarPopup:
                 ctrl = PopupText(
                     name=name,
                     text=text,
-                    pos_x=c * (1.0 / 7.0),
-                    pos_y=start_y + r * cell_h,
-                    width=1.0 / 7.0,
-                    height=cell_h,
+                    pos_x=padding_x + c * ((popup_width - 2 * padding_x) / 7.0),
+                    pos_y=padding_y
+                    + 2 * bigger_margin
+                    + header_height
+                    + weekdays_height
+                    + r * (week_row_height + margin),
+                    width=(popup_width - 2 * padding_x) / 7.0,
+                    height=week_row_height,
                     h_align="center",
                     foreground=color,
                 )
                 controls.append(ctrl)
 
-        total_height_fraction = 0.5 + rows_count * cell_h
-        base_pixel = 200
-        height_px = int(base_pixel * total_height_fraction)
-
-        self.layout = PopupRelativeLayout(
+        self.layout = PopupAbsoluteLayout(
             qtile,
-            width=220,
-            height=height_px,
+            width=popup_width,
+            height=popup_height,
             border=self.COLOR_FOREGROUND,
             border_width=1,
             controls=controls,
@@ -222,7 +240,3 @@ class CalendarPopup:
 
 
 calendar_popup = CalendarPopup()
-
-
-def toggle_calendar_popup(qtile):
-    calendar_popup.toggle(qtile)

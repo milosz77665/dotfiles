@@ -21,7 +21,7 @@ from .custom.BatteryWidget import BatteryWidget
 from .custom.BluetoothWidget import BluetoothWidget
 from .custom.WlanWidget import WlanWidget
 from .custom.VolumeWidget import VolumeWidget
-from .custom.CalendarPopup import toggle_calendar_popup
+from .custom.CalendarPopup import calendar_popup
 from .decorations.groups import retro_numbers_rules
 
 
@@ -95,6 +95,8 @@ def get_widget_list(is_primary=False):
         modify(BatteryWidget),
         widget.Clock(
             format="%d/%m/%y %H:%M:%S",
-            mouse_callbacks={"Button1": lazy.function(toggle_calendar_popup)},
+            mouse_callbacks={
+                "Button1": lazy.function(lambda qtile: calendar_popup.toggle(qtile))
+            },
         ),
     ]
