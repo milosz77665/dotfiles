@@ -2,11 +2,6 @@ import re
 from libqtile.log_utils import logger
 import subprocess
 
-from ....variables import (
-    BLUETOOTH_TURN_ON,
-    BLUETOOTH_TURN_OFF,
-)
-
 
 class BluetoothService:
     def get_status(self):
@@ -248,6 +243,6 @@ class BluetoothService:
     def toggle_state(self, qtile):
         status = self.get_status()
         if status is True:
-            qtile.spawn(BLUETOOTH_TURN_OFF)
+            qtile.spawn("bluetoothctl power off")
         else:
-            qtile.spawn(BLUETOOTH_TURN_ON)
+            qtile.spawn("bluetoothctl power on")

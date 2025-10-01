@@ -3,14 +3,12 @@ from libqtile.log_utils import logger
 
 from ....variables import (
     WLAN_INTERFACE,
-    WLAN_TURN_ON,
-    WLAN_TURN_OFF,
 )
 
 
 class WlanService:
-    def __init__(self):
-        self.interface = WLAN_INTERFACE
+    def __init__(self, interface=WLAN_INTERFACE):
+        self.interface = interface
 
     def get_status(self):
         try:
@@ -172,6 +170,6 @@ class WlanService:
     def toggle_state(self, qtile):
         status = self.get_status()
         if status:
-            qtile.spawn(WLAN_TURN_OFF)
+            qtile.spawn("nmcli radio wifi off")
         else:
-            qtile.spawn(WLAN_TURN_ON)
+            qtile.spawn("nmcli radio wifi on")

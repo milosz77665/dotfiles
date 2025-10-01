@@ -15,11 +15,11 @@ class WlanWidget(base.ThreadPoolText, TooltipMixin):
     def __init__(self, **config):
         super().__init__("", **config)
         TooltipMixin.__init__(self, **config)
-        self.wlan_service = WlanService()
         self.add_defaults(TooltipMixin.defaults)
         self.add_defaults(TOOLTIP_DEFAULTS)
         self.interface = WLAN_INTERFACE
         self.update_interval = FAST_UPDATE_INTERVAL
+        self.wlan_service = WlanService()
         self.mouse_callbacks = {
             "Button1": lazy.spawn(WLAN_APP),
             "Button3": lazy.function(

@@ -14,14 +14,12 @@ NOTES = "obsidian"
 # Widget common variables
 WLAN_INTERFACE = "wlo1"  # ifconfig
 THERMAL_SENSOR_TAG = "Core 0"
+MASTER_CHANNEL = "Master"
+MIC_CHANNEL = "Capture"
 DISK_APP = "baobab"
 WLAN_APP = "nm-connection-editor"
 BLUETOOTH_APP = "blueman-manager"
 AUDIO_APP = "pavucontrol"
-BLUETOOTH_TURN_ON = "bluetoothctl power on"
-BLUETOOTH_TURN_OFF = "bluetoothctl power off"
-WLAN_TURN_ON = "nmcli radio wifi on"
-WLAN_TURN_OFF = "nmcli radio wifi off"
 BACKLIGHT_NAME = "intel_backlight"
 
 # Autostart
@@ -108,28 +106,6 @@ TOOLTIP_DEFAULTS = [
 # # Window
 # WINDOWS_MARGIN = 3
 # WINDOWS_BORDER = 3
-
-# # Widgets
-# BAR_HEIGHT = 25
-# BAR_MARGIN = [5, 5, 0, 5]
-# FONT = "Hack Nerd Font"
-# FONTSIZE = 16
-# GROUPS_CIRCLES_SIZE = 20
-# PADDING = 12
-# GROUPS_PADDING = 6
-# BACKLIGHT_NAME = "intel_backlight"
-# BACKLIGHT_STEP = 2.0
-# WLAN_INTERFACE = "wlo1"  # ifconfig
-# DISK_APP = "baobab"
-# WLAN_APP = "nm-connection-editor"
-# BLUETOOTH_APP = "blueman-manager"
-# AUDIO_APP = "pavucontrol"
-# UPDATE_INTERVAL = 12.0
-# FAST_UPDATE_INTERVAL = 5.0
-# BLUETOOTH_TURN_ON = "bluetoothctl power on"
-# BLUETOOTH_TURN_OFF = "bluetoothctl power off"
-# WLAN_TURN_ON = "nmcli radio wifi on"
-# WLAN_TURN_OFF = "nmcli radio wifi off"
 
 # # Pill Decoration
 # PILL_RADIUS = 8
