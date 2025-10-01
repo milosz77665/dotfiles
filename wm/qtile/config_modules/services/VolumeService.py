@@ -1,7 +1,7 @@
 import subprocess
 from libqtile.log_utils import logger
 
-from variables import MASTER_CHANNEL
+from ..variables import MASTER_CHANNEL
 
 
 class VolumeService:
