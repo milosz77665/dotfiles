@@ -19,7 +19,7 @@ class VolumeWidget(base.ThreadPoolText, TooltipMixin):
             "Button3": lazy.function(self.toggle_mute),
         }
 
-    def _get_wifi_icon(self, volume):
+    def _get_volume_icon(self, volume):
         if volume == 0:
             return " "
         elif volume <= 50:
@@ -46,7 +46,7 @@ class VolumeWidget(base.ThreadPoolText, TooltipMixin):
             ).strip()
 
             volume = int(output.strip("%"))
-            icon = self._get_wifi_icon(volume)
+            icon = self._get_volume_icon(volume)
             self.tooltip_text = f"Volume: {volume}%"
             return f"{icon}"
         except Exception as e:
