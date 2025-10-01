@@ -1,10 +1,10 @@
 from libqtile.widget import base
 from libqtile.lazy import lazy
 from libqtile.log_utils import logger
-import subprocess
 from qtile_extras.widget.mixins import TooltipMixin
 
 from ...variables import AUDIO_APP, TOOLTIP_DEFAULTS
+from .services.VolumeService import VolumeService
 
 
 class VolumeWidget(base.ThreadPoolText, TooltipMixin):
@@ -14,9 +14,12 @@ class VolumeWidget(base.ThreadPoolText, TooltipMixin):
         self.add_defaults(TooltipMixin.defaults)
         self.add_defaults(TOOLTIP_DEFAULTS)
         self.update_interval = 0.2
+        self.volume_service = VolumeService()
         self.mouse_callbacks = {
             "Button1": lazy.spawn(AUDIO_APP),
-            "Button3": lazy.function(self.toggle_mute),
+            "Button3": lazy.function(
+                lambda qtile: self.volume_service.toggle_mute(qtile)
+            ),
         }
 
     def _get_volume_icon(self, volume):
@@ -29,29 +32,21 @@ class VolumeWidget(base.ThreadPoolText, TooltipMixin):
 
     def poll(self):
         try:
-            muted_output = subprocess.check_output(
-                "amixer get Master | grep -o '\\[off\\]' || true",
-                shell=True,
-                text=True,
-            ).strip()
+            is_muted = self.volume_service.is_muted()
 
-            if muted_output:
+            if is_muted:
                 self.tooltip_text = f"Volume: 0%"
-                return ""
+                return " "
 
-            output = subprocess.check_output(
-                "amixer get Master | grep -o '[0-9]\\+%' | head -1",
-                shell=True,
-                text=True,
-            ).strip()
+            volume = self.volume_service.get_volume()
 
-            volume = int(output.strip("%"))
+            if volume == 0:
+                self.tooltip_text = "Volume: 0%"
+                return " "
+
             icon = self._get_volume_icon(volume)
             self.tooltip_text = f"Volume: {volume}%"
             return f"{icon}"
         except Exception as e:
             logger.error(f"Volume error: {e}")
             return "󰝟 ERR"
-
-    def toggle_mute(self, qtile):
-        qtile.spawn("amixer set Master toggle")
