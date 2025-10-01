@@ -1,7 +1,7 @@
 import subprocess
 from libqtile.log_utils import logger
 
-from ....variables import MIC_CHANNEL
+from variables import MIC_CHANNEL
 
 
 class MicService:

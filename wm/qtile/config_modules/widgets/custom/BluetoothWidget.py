@@ -7,7 +7,7 @@ from ...variables import (
     BLUETOOTH_APP,
     TOOLTIP_DEFAULTS,
 )
-from .services.BluetoothService import BluetoothService
+from ...services.BluetoothService import BluetoothService
 
 
 class BluetoothWidget(base.ThreadPoolText, TooltipMixin):

@@ -1,7 +1,7 @@
 import subprocess
 from libqtile.log_utils import logger
 
-from ....variables import (
+from variables import (
     WLAN_INTERFACE,
 )
 

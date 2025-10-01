@@ -8,7 +8,7 @@ from ...variables import (
     WLAN_APP,
     TOOLTIP_DEFAULTS,
 )
-from .services.WlanService import WlanService
+from ...services.WlanService import WlanService
 
 
 class WlanWidget(base.ThreadPoolText, TooltipMixin):
