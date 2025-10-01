@@ -1,6 +1,7 @@
 import calendar
 from datetime import datetime, date
 from qtile_extras.popup import PopupText, PopupAbsoluteLayout
+
 from ...variables import BAR_BACKGROUND, BAR_FOREGROUND
 
 EN_MONTHS = [
@@ -189,8 +190,8 @@ class CalendarPopup:
             qtile,
             width=popup_width,
             height=popup_height,
-            border=self.COLOR_FOREGROUND,
-            border_width=1,
+            # border=self.COLOR_FOREGROUND,
+            # border_width=1,
             controls=controls,
             background=self.COLOR_BACKGROUND,
             initial_focus=self.focused_arrow_index,
@@ -210,7 +211,7 @@ class CalendarPopup:
         self._decrement_month_year()
         self._create_layout(self.qtile)
 
-        self.layout.show(x=-0.002, relative_to=3, relative_to_bar=True)
+        self.layout.show(relative_to=3, relative_to_bar=True)
         self.is_visible = True
 
     def next_month(self, *args):
@@ -222,7 +223,7 @@ class CalendarPopup:
                 pass
         self._increment_month_year()
         self._create_layout(self.qtile)
-        self.layout.show(x=-0.002, relative_to=3, relative_to_bar=True)
+        self.layout.show(relative_to=3, relative_to_bar=True)
         self.is_visible = True
 
     def toggle(self, qtile):
@@ -231,7 +232,7 @@ class CalendarPopup:
             self.displayed_year = self.current_date.year
 
             self._create_layout(qtile)
-            self.layout.show(x=-0.002, relative_to=3, relative_to_bar=True)
+            self.layout.show(relative_to=3, relative_to_bar=True)
             self.is_visible = True
         else:
             if self.layout:
