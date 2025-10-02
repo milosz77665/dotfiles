@@ -23,7 +23,7 @@ AUDIO_APP = "pavucontrol"
 BACKLIGHT_NAME = "intel_backlight"
 
 # Autostart
-MONITOR_CONFIG = os.path.expanduser("~/.screenlayout/monitor_config.sh")
+MONITOR_CONFIG_PATH = os.path.expanduser("~/.screenlayout/monitor_config.sh")
 
 # Groups
 GROUPS = [

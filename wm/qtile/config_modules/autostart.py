@@ -3,15 +3,15 @@ import os
 import subprocess
 from libqtile.log_utils import logger
 
-from .variables import DEFAULT_WALLPAPER_PATH, MONITOR_CONFIG
+from .variables import DEFAULT_WALLPAPER_PATH, MONITOR_CONFIG_PATH
 from .utils.touchpad import configure_touchpad
 
 
 @hook.subscribe.startup_once
 def autostart():
     # Configure Monitors
-    if os.path.exists(MONITOR_CONFIG):
-        subprocess.call([MONITOR_CONFIG])
+    if os.path.exists(MONITOR_CONFIG_PATH):
+        subprocess.call([MONITOR_CONFIG_PATH])
 
     # Touchpad configuration
     configure_touchpad()
