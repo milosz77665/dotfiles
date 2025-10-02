@@ -37,12 +37,12 @@ class BrightnessService:
             logger.error(f"BrightnessService: Unexpected error getting brightness: {e}")
             return 0
 
-    def change_brightness(self, direction="up", amount="5%"):
+    def change_brightness(self, direction="up", amount=5):
         try:
             if direction == "up":
-                command = f"brightnessctl s +{amount}"
+                command = f"brightnessctl s +{amount}%"
             elif direction == "down":
-                command = f"brightnessctl s {amount}-"
+                command = f"brightnessctl s {amount}%-"
             else:
                 return False
 
@@ -66,3 +66,6 @@ class BrightnessService:
                 f"BrightnessService: Unexpected error changing brightness: {e}"
             )
             return False
+
+
+brightness_service = BrightnessService()

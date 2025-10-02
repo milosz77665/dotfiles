@@ -173,3 +173,6 @@ class WlanService:
             qtile.spawn("nmcli radio wifi off")
         else:
             qtile.spawn("nmcli radio wifi on")
+
+
+wlan_service = WlanService()

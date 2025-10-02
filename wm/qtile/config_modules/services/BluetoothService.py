@@ -246,3 +246,6 @@ class BluetoothService:
             qtile.spawn("bluetoothctl power off")
         else:
             qtile.spawn("bluetoothctl power on")
+
+
+bt_service = BluetoothService()

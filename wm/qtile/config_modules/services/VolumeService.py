@@ -40,8 +40,8 @@ class VolumeService:
             logger.error(f"VolumeService: Error toggling mute: {e}")
             return False
 
-    def change_volume(self, direction="up", amount="5%"):
-        command = f"amixer set {self.channel} {amount}"
+    def change_volume(self, direction="up", amount=2):
+        command = f"amixer set {self.channel} {amount}%"
         if direction == "up":
             command += "+"
         elif direction == "down":
@@ -53,3 +53,6 @@ class VolumeService:
         except Exception as e:
             logger.error(f"VolumeService: Error changing volume: {e}")
             return False
+
+
+volume_service = VolumeService()

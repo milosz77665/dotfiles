@@ -7,6 +7,9 @@ from .utils.feh import change_wallpaper
 from .variables import MOD, TERMINAL, BROWSER, CODE_EDITOR, TEXT_EDITOR, NOTES, GROUPS
 from .popups.CalendarPopup import calendar_popup
 from .popups.PowerMenuPopup import power_menu_popup
+from .services.BrightnessService import brightness_service
+from .services.VolumeService import volume_service
+from .services.MicService import mic_service
 
 
 if not TERMINAL:
@@ -37,31 +40,37 @@ keys = [
     Key(
         [],
         "XF86MonBrightnessUp",
-        lazy.spawn("brightnessctl s +5%"),
+        lazy.function(lambda qtile: brightness_service.change_brightness("up", 5)),
         desc="Increase brightness",
     ),
     Key(
         [],
         "XF86MonBrightnessDown",
-        lazy.spawn("brightnessctl s 5-%"),
+        lazy.function(lambda qtile: brightness_service.change_brightness("down", 5)),
         desc="Decrease brightness",
     ),
     Key(
         [],
         "XF86AudioRaiseVolume",
-        lazy.spawn(f"wpctl set-volume @DEFAULT_AUDIO_SINK@ 2%+"),
+        lazy.function(lambda qtile: volume_service.change_volume("up", 2)),
         desc="Increase volume",
     ),
     Key(
         [],
         "XF86AudioLowerVolume",
-        lazy.spawn(f"wpctl set-volume @DEFAULT_AUDIO_SINK@ 2%-"),
+        lazy.function(lambda qtile: volume_service.change_volume("down", 2)),
         desc="Decrease volume",
     ),
     Key(
         [],
         "XF86AudioMute",
-        lazy.spawn(f"wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"),
+        lazy.function(lambda qtile: volume_service.toggle_mute()),
+        desc="Toggle mute",
+    ),
+    Key(
+        [],
+        "XF86AudioMicMute",
+        lazy.function(lambda qtile: mic_service.toggle_mute()),
         desc="Toggle mute",
     ),
     Key(

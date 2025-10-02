@@ -53,3 +53,6 @@ class MicService:
         except Exception as e:
             logger.error(f"VolumeService: Error changing mic volume: {e}")
             return False
+
+
+mic_service = MicService()
