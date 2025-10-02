@@ -21,7 +21,7 @@ from .widgets.BatteryWidget import BatteryWidget
 from .widgets.BluetoothWidget import BluetoothWidget
 from .widgets.WlanWidget import WlanWidget
 from .widgets.VolumeWidget import VolumeWidget
-from .popups.CalendarPopup import calendar_popup
+from .popups.CalendarPopup import CalendarPopup
 from .decorations.pill import pill_deco
 from .decorations.groups import numbers_rules, circles_rules
 
@@ -94,7 +94,7 @@ def get_widget_list(is_primary=False):
         widget.Clock(
             format="%d / %m / %y  %H:%M:%S",
             mouse_callbacks={
-                "Button1": lazy.function(lambda qtile: calendar_popup.toggle(qtile))
+                "Button1": lazy.function(lambda qtile: CalendarPopup().toggle(qtile))
             },
             **pill_deco,
         ),
