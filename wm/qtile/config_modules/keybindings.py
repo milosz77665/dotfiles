@@ -5,7 +5,7 @@ from libqtile.utils import guess_terminal
 
 from .utils.feh import change_wallpaper
 from .variables import MOD, TERMINAL, BROWSER, CODE_EDITOR, TEXT_EDITOR, NOTES, GROUPS
-from .popups.CalendarPopup import CalendarPopup
+from .popups.CalendarPopup import calendar_popup
 
 
 if not TERMINAL:
@@ -27,7 +27,7 @@ keys = [
     Key(
         ["control", "mod1"],
         "c",
-        lazy.function(lambda qtile: CalendarPopup().toggle(qtile)),
+        lazy.function(lambda qtile: calendar_popup.toggle(qtile)),
         desc="Toggle calendar",
     ),
     #############################

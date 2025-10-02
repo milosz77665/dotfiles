@@ -238,3 +238,6 @@ class CalendarPopup:
             if self.layout:
                 self.layout.hide()
             self.is_visible = False
+
+
+calendar_popup = CalendarPopup()
