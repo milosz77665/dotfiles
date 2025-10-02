@@ -6,6 +6,7 @@ from libqtile.utils import guess_terminal
 from .utils.feh import change_wallpaper
 from .variables import MOD, TERMINAL, BROWSER, CODE_EDITOR, TEXT_EDITOR, NOTES, GROUPS
 from .popups.CalendarPopup import calendar_popup
+from .popups.PowerMenuPopup import power_menu_popup
 
 
 if not TERMINAL:
@@ -192,7 +193,12 @@ keys = [
     ########### Qtile ############
     ##############################
     Key([MOD, "control"], "r", lazy.reload_config(), desc="Reload the config"),
-    Key([MOD, "control"], "q", lazy.shutdown(), desc="Shutdown Qtile"),
+    Key(
+        [MOD, "control"],
+        "q",
+        lazy.function(lambda qtile: power_menu_popup.toggle(qtile)),
+        desc="Shutdown Qtile",
+    ),
     Key(
         [MOD, "control"],
         "t",

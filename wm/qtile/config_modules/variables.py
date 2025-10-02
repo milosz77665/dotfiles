@@ -21,6 +21,7 @@ WLAN_APP = "nm-connection-editor"
 BLUETOOTH_APP = "blueman-manager"
 AUDIO_APP = "pavucontrol"
 BACKLIGHT_NAME = "intel_backlight"
+ASSSETS_PATH = os.path.expanduser("~/.dotfiles/wm/qtile/config_modules/assets/")
 
 # Autostart
 MONITOR_CONFIG_PATH = os.path.expanduser("~/.screenlayout/monitor_config.sh")
