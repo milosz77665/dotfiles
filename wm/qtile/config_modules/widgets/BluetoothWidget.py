@@ -2,12 +2,12 @@ from libqtile.widget import base
 from libqtile.lazy import lazy
 from qtile_extras.widget.mixins import TooltipMixin
 
-from ...variables import (
+from ..variables import (
     FAST_UPDATE_INTERVAL,
     BLUETOOTH_APP,
     TOOLTIP_DEFAULTS,
 )
-from ...services.BluetoothService import BluetoothService
+from ..services.BluetoothService import BluetoothService
 
 
 class BluetoothWidget(base.ThreadPoolText, TooltipMixin):

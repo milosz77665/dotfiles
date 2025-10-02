@@ -3,7 +3,7 @@ from libqtile.log_utils import logger
 from qtile_extras.widget.mixins import TooltipMixin
 
 import subprocess
-from ...variables import FAST_UPDATE_INTERVAL, TOOLTIP_DEFAULTS
+from ..variables import FAST_UPDATE_INTERVAL, TOOLTIP_DEFAULTS
 
 
 class BatteryWidget(base.ThreadPoolText, TooltipMixin):

@@ -1,6 +1,6 @@
 from qtile_extras.widget.groupbox2 import GroupBoxRule
 
-from ...variables import (
+from ..variables import (
     GROUPS_ACTIVE_COLOR,
     GROUPS_OCCUPIED_COLOR,
     GROUPS_EMPTY_COLOR,

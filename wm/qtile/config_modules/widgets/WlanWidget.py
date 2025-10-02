@@ -2,13 +2,13 @@ from libqtile.widget import base
 from libqtile.lazy import lazy
 from qtile_extras.widget.mixins import TooltipMixin
 
-from ...variables import (
+from ..variables import (
     FAST_UPDATE_INTERVAL,
     WLAN_INTERFACE,
     WLAN_APP,
     TOOLTIP_DEFAULTS,
 )
-from ...services.WlanService import WlanService
+from ..services.WlanService import WlanService
 
 
 class WlanWidget(base.ThreadPoolText, TooltipMixin):

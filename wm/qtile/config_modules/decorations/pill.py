@@ -1,6 +1,6 @@
 from qtile_extras.widget.decorations import RectDecoration
 
-from ...variables import (
+from ..variables import (
     PILL_COLOR,
     PILL_RADIUS,
     PADDING,

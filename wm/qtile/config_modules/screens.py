@@ -8,7 +8,7 @@ from .variables import (
 )
 
 # from .widgets.widgets_modern import get_widget_list
-from .widgets.widgets_retro import get_widget_list
+from .widgets_retro import get_widget_list
 
 
 screens = [

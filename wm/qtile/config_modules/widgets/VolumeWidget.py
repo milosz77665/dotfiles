@@ -3,8 +3,8 @@ from libqtile.lazy import lazy
 from libqtile.log_utils import logger
 from qtile_extras.widget.mixins import TooltipMixin
 
-from ...variables import AUDIO_APP, TOOLTIP_DEFAULTS
-from ...services.VolumeService import VolumeService
+from ..variables import AUDIO_APP, TOOLTIP_DEFAULTS
+from ..services.VolumeService import VolumeService
 
 
 class VolumeWidget(base.ThreadPoolText, TooltipMixin):
