@@ -21,7 +21,7 @@ from .custom.BatteryWidget import BatteryWidget
 from .custom.BluetoothWidget import BluetoothWidget
 from .custom.WlanWidget import WlanWidget
 from .custom.VolumeWidget import VolumeWidget
-from .custom.CalendarPopup import calendar_popup
+from ..popups.CalendarPopup import calendar_popup
 from .decorations.groups import retro_numbers_rules
 
 

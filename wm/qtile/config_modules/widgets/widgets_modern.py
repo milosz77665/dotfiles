@@ -21,7 +21,7 @@ from .custom.BatteryWidget import BatteryWidget
 from .custom.BluetoothWidget import BluetoothWidget
 from .custom.WlanWidget import WlanWidget
 from .custom.VolumeWidget import VolumeWidget
-from .custom.CalendarPopup import calendar_popup
+from ..popups.CalendarPopup import calendar_popup
 from .decorations.pill import pill_deco
 from .decorations.groups import numbers_rules, circles_rules
 

@@ -2,7 +2,7 @@ import calendar
 from datetime import datetime, date
 from qtile_extras.popup import PopupText, PopupAbsoluteLayout
 
-from ...variables import BAR_BACKGROUND, BAR_FOREGROUND
+from ..variables import BAR_BACKGROUND, BAR_FOREGROUND
 
 EN_MONTHS = [
     "",

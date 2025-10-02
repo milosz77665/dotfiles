@@ -5,7 +5,7 @@ from libqtile.utils import guess_terminal
 
 from .utils.feh import change_wallpaper
 from .variables import MOD, TERMINAL, BROWSER, CODE_EDITOR, TEXT_EDITOR, NOTES, GROUPS
-from .widgets.custom.CalendarPopup import calendar_popup
+from .popups.CalendarPopup import calendar_popup
 
 
 if not TERMINAL:
