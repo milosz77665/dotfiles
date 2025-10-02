@@ -69,6 +69,31 @@ class CalendarPopup:
             color = self.COLOR_TODAY
         return text, color
 
+    def prev_month(self):
+        self.focused_arrow_index = 0
+        if self.layout:
+            try:
+                self.layout.hide()
+            except Exception:
+                pass
+        self._decrement_month_year()
+        self._create_layout(self.qtile)
+
+        self.layout.show(relative_to=3, relative_to_bar=True)
+        self.is_visible = True
+
+    def next_month(self):
+        self.focused_arrow_index = 1
+        if self.layout:
+            try:
+                self.layout.hide()
+            except Exception:
+                pass
+        self._increment_month_year()
+        self._create_layout(self.qtile)
+        self.layout.show(relative_to=3, relative_to_bar=True)
+        self.is_visible = True
+
     def _create_layout(self, qtile):
         self.qtile = qtile
         controls = []
@@ -196,35 +221,14 @@ class CalendarPopup:
             background=self.COLOR_BACKGROUND,
             initial_focus=self.focused_arrow_index,
             close_on_click=True,
-            key_callbacks={
-                "Escape": lambda: self.toggle(qtile),
-            },
         )
 
-    def prev_month(self, *args):
-        self.focused_arrow_index = 0
-        if self.layout:
-            try:
-                self.layout.hide()
-            except Exception:
-                pass
-        self._decrement_month_year()
-        self._create_layout(self.qtile)
+        self.layout.bind_callbacks(close={"Escape": self._hide})
 
-        self.layout.show(relative_to=3, relative_to_bar=True)
-        self.is_visible = True
-
-    def next_month(self, *args):
-        self.focused_arrow_index = 1
+    def _hide(self):
         if self.layout:
-            try:
-                self.layout.hide()
-            except Exception:
-                pass
-        self._increment_month_year()
-        self._create_layout(self.qtile)
-        self.layout.show(relative_to=3, relative_to_bar=True)
-        self.is_visible = True
+            self.layout.hide()
+        self.is_visible = False
 
     def toggle(self, qtile):
         if not self.is_visible:
@@ -235,9 +239,7 @@ class CalendarPopup:
             self.layout.show(relative_to=3, relative_to_bar=True)
             self.is_visible = True
         else:
-            if self.layout:
-                self.layout.hide()
-            self.is_visible = False
+            self._hide()
 
 
 calendar_popup = CalendarPopup()
