@@ -20,10 +20,7 @@ class WlanWidget(base.ThreadPoolText, TooltipMixin):
         self.add_defaults(TOOLTIP_DEFAULTS)
         self.interface = WLAN_INTERFACE
         self.update_interval = FAST_UPDATE_INTERVAL
-        self.mouse_callbacks = {
-            "Button1": lazy.spawn(WLAN_APP),
-            "Button3": lazy.function(lambda qtile: wlan_service.toggle_state(qtile)),
-        }
+        self.mouse_callbacks = {"Button1": lazy.spawn(WLAN_APP)}
         self.is_enabled = False
         self.icon_map = [
             (90, "󰤨"),

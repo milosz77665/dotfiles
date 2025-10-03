@@ -18,10 +18,7 @@ class BluetoothWidget(base.ThreadPoolText, TooltipMixin):
         self.add_defaults(TooltipMixin.defaults)
         self.add_defaults(TOOLTIP_DEFAULTS)
         self.update_interval = FAST_UPDATE_INTERVAL
-        self.mouse_callbacks = {
-            "Button1": lazy.spawn(BLUETOOTH_APP),
-            "Button3": lazy.function(lambda qtile: bt_service.toggle_state(qtile)),
-        }
+        self.mouse_callbacks = {"Button1": lazy.spawn(BLUETOOTH_APP)}
         self.is_enabled = False
 
     def poll(self):

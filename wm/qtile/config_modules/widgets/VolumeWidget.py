@@ -14,10 +14,7 @@ class VolumeWidget(base.ThreadPoolText, TooltipMixin):
         self.add_defaults(TooltipMixin.defaults)
         self.add_defaults(TOOLTIP_DEFAULTS)
         self.update_interval = 0.2
-        self.mouse_callbacks = {
-            "Button1": lazy.spawn(AUDIO_APP),
-            "Button3": lazy.function(lambda qtile: volume_service.toggle_mute(qtile)),
-        }
+        self.mouse_callbacks = {"Button1": lazy.spawn(AUDIO_APP)}
         self.icon_map = [
             (60, " "),
             (30, " "),
@@ -25,22 +22,13 @@ class VolumeWidget(base.ThreadPoolText, TooltipMixin):
         ]
 
     def poll(self):
-        try:
-            is_muted = volume_service.is_muted()
+        is_muted = volume_service.is_muted()
+        volume = volume_service.get_volume()
 
-            if is_muted:
-                self.tooltip_text = f"Volume: 0%"
-                return " "
-
-            volume = volume_service.get_volume()
-
-            if volume == 0:
-                self.tooltip_text = "Volume: 0%"
-                return " "
-
+        if is_muted:
+            self.tooltip_text = f"Muted"
+            return " "
+        else:
             icon = next(icon for level, icon in self.icon_map if volume >= level)
             self.tooltip_text = f"Volume: {volume}%"
             return f"{icon}"
-        except Exception as e:
-            logger.error(f"Volume error: {e}")
-            return "󰝟 ERR"
