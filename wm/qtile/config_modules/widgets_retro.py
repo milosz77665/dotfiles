@@ -83,6 +83,7 @@ def get_widget_list(is_primary=False):
             mouse_callbacks={"Button1": lazy.widget["music_player"].toggle_player()},
         ),
         (widget.Systray() if is_primary else widget.Spacer(length=0)),
+        widget.Spacer(length=10),
         modify(BluetoothWidget),
         modify(WlanWidget, padding=PADDING + 5),
         modify(VolumeWidget),
