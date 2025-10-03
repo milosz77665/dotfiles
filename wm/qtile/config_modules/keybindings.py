@@ -162,7 +162,7 @@ keys = [
     Key(
         ["mod1"],
         "s",
-        lazy.function(lambda qtile: airplane_mode_service.toggle_airplane_mode()),
+        lazy.function(lambda qtile: airplane_mode_service.toggle_airplane_mode(qtile)),
         desc="Enter airplane mode",
     ),
     ############################
