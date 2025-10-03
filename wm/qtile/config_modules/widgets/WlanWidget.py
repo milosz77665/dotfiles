@@ -45,10 +45,13 @@ class WlanWidget(base.ThreadPoolText, TooltipMixin):
 
         if self.is_enabled:
             essid = self.wlan_service.get_ssid()
+            ip_address = self.wlan_service.get_ip_address()
             signal = self.wlan_service.get_signal_strength()
             icon = self._get_wifi_icon(signal)
 
-            self.tooltip_text = f"SSID: {essid}" if len(essid) > 0 else "Disconnected"
+            self.tooltip_text = (
+                f"SSID: {essid} IP: {ip_address}" if len(essid) > 0 else "Disconnected"
+            )
             return f"{icon}"
         else:
             self.tooltip_text = "Turned off"

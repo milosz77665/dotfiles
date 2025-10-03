@@ -41,6 +41,22 @@ class WlanService:
             logger.error(f"Unexpected error getting SSID: {e}")
             return None
 
+    def get_ip_address(self):
+        try:
+            output = subprocess.check_output(
+                f"ip -4 addr show {self.interface}"
+                + "| grep -oP '(?<=inet\s)\d+(\.\d+){3}'",
+                shell=True,
+                text=True,
+                stderr=subprocess.PIPE,
+            ).strip()
+            return output if output else None
+        except subprocess.CalledProcessError:
+            return None
+        except Exception as e:
+            logger.error(f"Unexpected error getting IP address: {e}")
+            return None
+
     def get_signal_strength(self):
         try:
             output = subprocess.check_output(
