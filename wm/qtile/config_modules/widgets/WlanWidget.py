@@ -27,18 +27,13 @@ class WlanWidget(base.ThreadPoolText, TooltipMixin):
             ),
         }
         self.is_enabled = False
-
-    def _get_wifi_icon(self, strength):
-        if strength == 0:
-            return "󰤯"
-        elif strength < 40:
-            return "󰤟"
-        elif strength < 70:
-            return "󰤢"
-        elif strength < 90:
-            return "󰤥"
-        else:
-            return "󰤨"
+        self.icon_map = [
+            (90, "󰤨"),
+            (70, "󰤥"),
+            (40, "󰤢"),
+            (1, "󰤟"),
+            (0, "󰤯"),
+        ]
 
     def poll(self):
         self.is_enabled = self.wlan_service.get_status()
@@ -47,7 +42,7 @@ class WlanWidget(base.ThreadPoolText, TooltipMixin):
             essid = self.wlan_service.get_ssid()
             ip_address = self.wlan_service.get_ip_address()
             signal = self.wlan_service.get_signal_strength()
-            icon = self._get_wifi_icon(signal)
+            icon = next(icon for level, icon in self.icon_map if signal >= level)
 
             self.tooltip_text = (
                 f"SSID: {essid} IP: {ip_address}" if len(essid) > 0 else "Disconnected"

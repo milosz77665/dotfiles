@@ -21,14 +21,11 @@ class VolumeWidget(base.ThreadPoolText, TooltipMixin):
                 lambda qtile: self.volume_service.toggle_mute(qtile)
             ),
         }
-
-    def _get_volume_icon(self, volume):
-        if volume == 0:
-            return " "
-        elif volume <= 50:
-            return " "
-        else:
-            return " "
+        self.icon_map = [
+            (60, " "),
+            (30, " "),
+            (0, " "),
+        ]
 
     def poll(self):
         try:
@@ -44,7 +41,7 @@ class VolumeWidget(base.ThreadPoolText, TooltipMixin):
                 self.tooltip_text = "Volume: 0%"
                 return " "
 
-            icon = self._get_volume_icon(volume)
+            icon = next(icon for level, icon in self.icon_map if volume >= level)
             self.tooltip_text = f"Volume: {volume}%"
             return f"{icon}"
         except Exception as e:
