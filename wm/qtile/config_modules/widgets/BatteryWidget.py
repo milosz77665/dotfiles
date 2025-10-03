@@ -2,7 +2,7 @@ from libqtile.widget import base
 from qtile_extras.widget.mixins import TooltipMixin
 
 from ..variables import FAST_UPDATE_INTERVAL, TOOLTIP_DEFAULTS
-from ..services.BatteryService import BatteryService
+from ..services.BatteryService import battery_service
 
 
 class BatteryWidget(base.ThreadPoolText, TooltipMixin):
@@ -12,7 +12,6 @@ class BatteryWidget(base.ThreadPoolText, TooltipMixin):
         self.add_defaults(TooltipMixin.defaults)
         self.add_defaults(TOOLTIP_DEFAULTS)
         self.update_interval = FAST_UPDATE_INTERVAL
-        self.battery_service = BatteryService()
         self.icon_map = [
             (100, "󰁹"),
             (90, "󰂂"),
@@ -28,10 +27,10 @@ class BatteryWidget(base.ThreadPoolText, TooltipMixin):
         ]
 
     def poll(self):
-        status = self.battery_service.get_status()
-        percent = self.battery_service.get_percent()
-        time = self.battery_service.get_time_remaining()
-        capacity = self.battery_service.get_capacity()
+        status = battery_service.get_status()
+        percent = battery_service.get_percent()
+        time = battery_service.get_time_remaining()
+        capacity = battery_service.get_capacity()
 
         icon = next(icon for level, icon in self.icon_map if percent >= level)
 

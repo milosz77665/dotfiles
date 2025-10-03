@@ -8,7 +8,7 @@ from ..variables import (
     WLAN_APP,
     TOOLTIP_DEFAULTS,
 )
-from ..services.WlanService import WlanService
+from ..services.WlanService import wlan_service
 
 
 class WlanWidget(base.ThreadPoolText, TooltipMixin):
@@ -19,12 +19,9 @@ class WlanWidget(base.ThreadPoolText, TooltipMixin):
         self.add_defaults(TOOLTIP_DEFAULTS)
         self.interface = WLAN_INTERFACE
         self.update_interval = FAST_UPDATE_INTERVAL
-        self.wlan_service = WlanService()
         self.mouse_callbacks = {
             "Button1": lazy.spawn(WLAN_APP),
-            "Button3": lazy.function(
-                lambda qtile: self.wlan_service.toggle_state(qtile)
-            ),
+            "Button3": lazy.function(lambda qtile: wlan_service.toggle_state(qtile)),
         }
         self.is_enabled = False
         self.icon_map = [
@@ -36,12 +33,12 @@ class WlanWidget(base.ThreadPoolText, TooltipMixin):
         ]
 
     def poll(self):
-        self.is_enabled = self.wlan_service.get_status()
+        self.is_enabled = wlan_service.get_status()
 
         if self.is_enabled:
-            essid = self.wlan_service.get_ssid()
-            ip_address = self.wlan_service.get_ip_address()
-            signal = self.wlan_service.get_signal_strength()
+            essid = wlan_service.get_ssid()
+            ip_address = wlan_service.get_ip_address()
+            signal = wlan_service.get_signal_strength()
             icon = next(icon for level, icon in self.icon_map if signal >= level)
 
             self.tooltip_text = (

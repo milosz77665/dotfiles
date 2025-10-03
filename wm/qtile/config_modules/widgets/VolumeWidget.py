@@ -4,7 +4,7 @@ from libqtile.log_utils import logger
 from qtile_extras.widget.mixins import TooltipMixin
 
 from ..variables import AUDIO_APP, TOOLTIP_DEFAULTS
-from ..services.VolumeService import VolumeService
+from ..services.VolumeService import volume_service
 
 
 class VolumeWidget(base.ThreadPoolText, TooltipMixin):
@@ -14,12 +14,9 @@ class VolumeWidget(base.ThreadPoolText, TooltipMixin):
         self.add_defaults(TooltipMixin.defaults)
         self.add_defaults(TOOLTIP_DEFAULTS)
         self.update_interval = 0.2
-        self.volume_service = VolumeService()
         self.mouse_callbacks = {
             "Button1": lazy.spawn(AUDIO_APP),
-            "Button3": lazy.function(
-                lambda qtile: self.volume_service.toggle_mute(qtile)
-            ),
+            "Button3": lazy.function(lambda qtile: volume_service.toggle_mute(qtile)),
         }
         self.icon_map = [
             (60, " "),
@@ -29,13 +26,13 @@ class VolumeWidget(base.ThreadPoolText, TooltipMixin):
 
     def poll(self):
         try:
-            is_muted = self.volume_service.is_muted()
+            is_muted = volume_service.is_muted()
 
             if is_muted:
                 self.tooltip_text = f"Volume: 0%"
                 return " "
 
-            volume = self.volume_service.get_volume()
+            volume = volume_service.get_volume()
 
             if volume == 0:
                 self.tooltip_text = "Volume: 0%"
