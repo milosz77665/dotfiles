@@ -18,6 +18,7 @@ from .widgets.BatteryWidget import BatteryWidget
 from .widgets.BluetoothWidget import BluetoothWidget
 from .widgets.WlanWidget import WlanWidget
 from .widgets.VolumeWidget import VolumeWidget
+from .widgets.MicWidget import MicWidget
 from .popups.CalendarPopup import calendar_popup
 from .decorations.groups import retro_numbers_rules
 
@@ -83,6 +84,7 @@ def get_widget_list(is_primary=False):
         widget.Spacer(length=10),
         modify(BluetoothWidget),
         modify(WlanWidget, padding=PADDING + 5),
+        modify(MicWidget),
         modify(VolumeWidget),
         modify(BatteryWidget),
         widget.Clock(

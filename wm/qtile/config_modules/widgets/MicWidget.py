@@ -1,0 +1,28 @@
+from libqtile.widget import base
+from libqtile.lazy import lazy
+from libqtile.log_utils import logger
+from qtile_extras.widget.mixins import TooltipMixin
+
+from ..variables import AUDIO_APP, TOOLTIP_DEFAULTS
+from ..services.MicService import mic_service
+
+
+class MicWidget(base.ThreadPoolText, TooltipMixin):
+    def __init__(self, **config):
+        super().__init__("", **config)
+        TooltipMixin.__init__(self, **config)
+        self.add_defaults(TooltipMixin.defaults)
+        self.add_defaults(TOOLTIP_DEFAULTS)
+        self.update_interval = 0.2
+        self.mouse_callbacks = {"Button1": lazy.spawn(AUDIO_APP)}
+
+    def poll(self):
+        is_muted = mic_service.is_muted()
+        volume = mic_service.get_volume()
+
+        if is_muted:
+            self.tooltip_text = f"Muted"
+            return " "
+        else:
+            self.tooltip_text = f"Volume: {volume}%"
+            return ""
