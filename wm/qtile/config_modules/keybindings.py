@@ -140,6 +140,24 @@ keys = [
         lazy.spawn(f"flameshot full"),
         desc="Capture the entire desktop",
     ),
+    Key(
+        [MOD, "control"],
+        "N",
+        lazy.widget["music_player"].next(),
+        desc="Play the next track",
+    ),
+    Key(
+        [MOD, "control"],
+        "B",
+        lazy.widget["music_player"].previous(),
+        desc="Play the previous track",
+    ),
+    Key(
+        [MOD, "control"],
+        "P",
+        lazy.widget["music_player"].play_pause(),
+        desc="Toggle the playback status",
+    ),
     ############################
     ##### Change Win Focus #####
     ############################

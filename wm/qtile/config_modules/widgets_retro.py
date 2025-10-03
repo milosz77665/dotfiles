@@ -1,6 +1,5 @@
 from libqtile.lazy import lazy
 from qtile_extras import widget
-from qtile_extras.popup.templates.mpris2 import DEFAULT_LAYOUT
 from qtile_extras.widget import modify
 from qtile_extras.widget.groupbox2 import GroupBox2
 
@@ -75,12 +74,10 @@ def get_widget_list(is_primary=False):
         widget.Spacer(),
         widget.Mpris2(
             name="music_player",
-            popup_layout=DEFAULT_LAYOUT,
-            width=100,
+            width=200,
             scroll=True,
-            scroll_interval=0.1,
+            scroll_interval=0.03,
             scroll_repeat=True,
-            mouse_callbacks={"Button1": lazy.widget["music_player"].toggle_player()},
         ),
         (widget.Systray() if is_primary else widget.Spacer(length=0)),
         widget.Spacer(length=10),
