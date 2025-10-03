@@ -9,6 +9,7 @@ from ..variables import (
     TOOLTIP_DEFAULTS,
 )
 from ..services.WlanService import wlan_service
+from ..services.AirplaneModeService import airplane_mode_service
 
 
 class WlanWidget(base.ThreadPoolText, TooltipMixin):
@@ -42,9 +43,13 @@ class WlanWidget(base.ThreadPoolText, TooltipMixin):
             icon = next(icon for level, icon in self.icon_map if signal >= level)
 
             self.tooltip_text = (
-                f"SSID: {essid} IP: {ip_address}" if len(essid) > 0 else "Disconnected"
+                f"SSID: {essid} IP: {ip_address}" if essid else "Disconnected"
             )
             return f"{icon}"
         else:
-            self.tooltip_text = "Turned off"
-            return f"󰤭"
+            if airplane_mode_service.get_status():
+                self.tooltip_text = "Airplane mode is active"
+                return "󰀝"
+            else:
+                self.tooltip_text = "Turned off"
+                return f"󰤭"

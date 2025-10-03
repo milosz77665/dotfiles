@@ -8,6 +8,7 @@ from ..variables import (
     TOOLTIP_DEFAULTS,
 )
 from ..services.BluetoothService import bt_service
+from ..services.AirplaneModeService import airplane_mode_service
 
 
 class BluetoothWidget(base.ThreadPoolText, TooltipMixin):
@@ -38,5 +39,8 @@ class BluetoothWidget(base.ThreadPoolText, TooltipMixin):
                 output_text = "󰂯"
             return output_text
         else:
-            self.tooltip_text = f"Turned off"
-            return "󰂲"
+            if airplane_mode_service.get_status():
+                return ""
+            else:
+                self.tooltip_text = f"Turned off"
+                return "󰂲"

@@ -13,6 +13,7 @@ from .popups.BrightnessPopup import brightness_popup
 from .services.BrightnessService import brightness_service
 from .services.VolumeService import volume_service
 from .services.MicService import mic_service
+from .services.AirplaneModeService import airplane_mode_service
 
 
 if not TERMINAL:
@@ -157,6 +158,12 @@ keys = [
         "P",
         lazy.widget["music_player"].play_pause(),
         desc="Toggle the playback status",
+    ),
+    Key(
+        ["mod1"],
+        "s",
+        lazy.function(lambda qtile: airplane_mode_service.toggle_airplane_mode()),
+        desc="Enter airplane mode",
     ),
     ############################
     ##### Change Win Focus #####
