@@ -7,6 +7,9 @@ from .utils.feh import change_wallpaper
 from .variables import MOD, TERMINAL, BROWSER, CODE_EDITOR, TEXT_EDITOR, NOTES, GROUPS
 from .popups.CalendarPopup import calendar_popup
 from .popups.PowerMenuPopup import power_menu_popup
+from .popups.VolumePopup import volume_popup
+from .popups.MicPopup import mic_popup
+from .popups.BrightnessPopup import brightness_popup
 from .services.BrightnessService import brightness_service
 from .services.VolumeService import volume_service
 from .services.MicService import mic_service
@@ -14,6 +17,28 @@ from .services.MicService import mic_service
 
 if not TERMINAL:
     TERMINAL = guess_terminal()
+
+
+def change_value_and_show_status(qtile, target, direction, amount):
+    if target == "volume":
+        volume_service.change_volume(direction, amount)
+        volume_popup.show(qtile)
+    elif target == "brightness":
+        brightness_service.change_brightness(direction, amount)
+        brightness_popup.show(qtile)
+    elif target == "mic":
+        mic_service.change_volume(direction, amount)
+        mic_popup.show(qtile)
+
+
+def toggle_mute_and_show_status(qtile, target):
+    if target == "volume":
+        volume_service.toggle_mute()
+        volume_popup.show(qtile)
+    elif target == "mic":
+        mic_service.toggle_mute()
+        mic_popup.show(qtile)
+
 
 keys = [
     # A list of available commands that can be bound to keys can be found
@@ -40,38 +65,62 @@ keys = [
     Key(
         [],
         "XF86MonBrightnessUp",
-        lazy.function(lambda qtile: brightness_service.change_brightness("up", 5)),
+        lazy.function(
+            lambda qtile: change_value_and_show_status(qtile, "brightness", "up", 5)
+        ),
         desc="Increase brightness",
     ),
     Key(
         [],
         "XF86MonBrightnessDown",
-        lazy.function(lambda qtile: brightness_service.change_brightness("down", 5)),
+        lazy.function(
+            lambda qtile: change_value_and_show_status(qtile, "brightness", "down", 5)
+        ),
         desc="Decrease brightness",
     ),
     Key(
         [],
         "XF86AudioRaiseVolume",
-        lazy.function(lambda qtile: volume_service.change_volume("up", 2)),
+        lazy.function(
+            lambda qtile: change_value_and_show_status(qtile, "volume", "up", 2)
+        ),
         desc="Increase volume",
     ),
     Key(
         [],
         "XF86AudioLowerVolume",
-        lazy.function(lambda qtile: volume_service.change_volume("down", 2)),
+        lazy.function(
+            lambda qtile: change_value_and_show_status(qtile, "volume", "down", 2)
+        ),
         desc="Decrease volume",
     ),
     Key(
         [],
         "XF86AudioMute",
-        lazy.function(lambda qtile: volume_service.toggle_mute()),
+        lazy.function(lambda qtile: toggle_mute_and_show_status(qtile, "volume")),
         desc="Toggle mute",
+    ),
+    Key(
+        ["mod1"],
+        "XF86AudioRaiseVolume",
+        lazy.function(
+            lambda qtile: change_value_and_show_status(qtile, "mic", "up", 2)
+        ),
+        desc="Increase mic volume",
+    ),
+    Key(
+        ["mod1"],
+        "XF86AudioLowerVolume",
+        lazy.function(
+            lambda qtile: change_value_and_show_status(qtile, "mic", "down", 2)
+        ),
+        desc="Decrease mic volume",
     ),
     Key(
         [],
         "XF86AudioMicMute",
-        lazy.function(lambda qtile: mic_service.toggle_mute()),
-        desc="Toggle mute",
+        lazy.function(lambda qtile: toggle_mute_and_show_status(qtile, "mic")),
+        desc="Toggle mic mute",
     ),
     Key(
         [],

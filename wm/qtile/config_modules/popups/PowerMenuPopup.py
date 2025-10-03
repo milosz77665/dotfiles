@@ -15,7 +15,7 @@ class PowerMenuPopup:
         mask_color=BAR_FOREGROUND,
         text_color=BAR_FOREGROUND,
         popup_color=BAR_BACKGROUND,
-        asset_path=ASSSETS_PATH,
+        assets_path=ASSSETS_PATH,
     ):
         self.layout = None
         self.is_visible = False
@@ -23,7 +23,7 @@ class PowerMenuPopup:
         self.MASK_COLOR = mask_color
         self.TEXT_COLOR = text_color
         self.POPUP_COLOR = popup_color
-        self.ASSETS_PATH = asset_path
+        self.ASSETS_PATH = assets_path
 
     def _create_layout(self, qtile):
         self.qtile = qtile

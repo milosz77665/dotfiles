@@ -40,8 +40,8 @@ class MicService:
             logger.error(f"VolumeService: Error toggling mic mute: {e}")
             return False
 
-    def change_volume(self, direction="up", amount="5%"):
-        command = f"amixer set {self.channel} {amount}"
+    def change_volume(self, direction="up", amount=5):
+        command = f"amixer set {self.channel} {amount}%"
         if direction == "up":
             command += "+"
         elif direction == "down":
