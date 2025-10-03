@@ -23,18 +23,6 @@ class BluetoothWidget(base.ThreadPoolText, TooltipMixin):
             "Button3": lazy.function(lambda qtile: self.bt_service.toggle_state(qtile)),
         }
         self.is_enabled = False
-        self.icon_map = [
-            (100, "󰥈"),
-            (90, "󰥆"),
-            (80, "󰥅"),
-            (70, "󰥄"),
-            (60, "󰥃"),
-            (50, "󰥂"),
-            (40, "󰥁"),
-            (30, "󰥀"),
-            (20, "󰤿"),
-            (10, "󰤾"),
-        ]
 
     def poll(self):
         self.is_enabled = self.bt_service.get_status()
