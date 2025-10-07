@@ -7,6 +7,7 @@ from .utils.feh import change_wallpaper
 from .variables import MOD, TERMINAL, BROWSER, CODE_EDITOR, TEXT_EDITOR, NOTES, GROUPS
 from .popups.CalendarPopup import calendar_popup
 from .popups.PowerMenuPopup import power_menu_popup
+from .popups.MenuPopup import menu_popup
 from .popups.VolumePopup import volume_popup
 from .popups.MicPopup import mic_popup
 from .popups.BrightnessPopup import brightness_popup
@@ -59,6 +60,12 @@ keys = [
         "c",
         lazy.function(lambda qtile: calendar_popup.toggle(qtile)),
         desc="Toggle calendar",
+    ),
+    Key(
+        [MOD],
+        "u",
+        lazy.function(lambda qtile: menu_popup.toggle(qtile)),
+        desc="Toggle menu popup",
     ),
     #############################
     ####### Function Keys #######
@@ -143,19 +150,19 @@ keys = [
     ),
     Key(
         [MOD, "control"],
-        "N",
+        "n",
         lazy.widget["music_player"].next(),
         desc="Play the next track",
     ),
     Key(
         [MOD, "control"],
-        "B",
+        "b",
         lazy.widget["music_player"].previous(),
         desc="Play the previous track",
     ),
     Key(
         [MOD, "control"],
-        "P",
+        "p",
         lazy.widget["music_player"].play_pause(),
         desc="Toggle the playback status",
     ),
