@@ -43,7 +43,7 @@ class BatteryService:
             try:
                 parts = status_line.split(", ")
                 if len(parts) > 2:
-                    time_part = parts[2].split()[0]
+                    time_part = parts[2].split()[0][:-3:]
                     return time_part
                 return ""
             except IndexError:
