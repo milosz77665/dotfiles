@@ -109,14 +109,14 @@ class WlanService:
 
     def connect_to_network(self, ssid, password=None):
         try:
-            command = f'nmcli dev wifi connect "{ssid}"'
+            base_command = f'nmcli dev wifi connect "{ssid}"'
+            command = base_command
             if password:
                 command += f' password "{password}"'
 
             result = subprocess.run(
                 command,
                 shell=True,
-                check=True,
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,
                 text=True,
@@ -127,7 +127,12 @@ class WlanService:
                 logger.info(f"Successfully connected to {ssid}.")
                 return True, "Connection successful."
 
+            if not password and "secrets were required" in result.stderr.lower():
+                logger.info(f"Password required for {ssid}.")
+                return False, "Password required"
+
             error_output = result.stderr.strip() or result.stdout.strip()
+            logger.warning(f"Connection failed for {ssid}: {error_output}")
             return False, f"Connection failed: {error_output}"
 
         except subprocess.TimeoutExpired:
@@ -143,18 +148,11 @@ class WlanService:
 
     def disconnect_from_network(self):
         try:
-            # Find the active connection name
-            active_connection = subprocess.check_output(
-                "nmcli -t -f active,name connection show --active | grep '^yes' | cut -d':' -f2",
-                shell=True,
-                text=True,
-                stderr=subprocess.PIPE,
-            ).strip()
+            active_connection = self.get_ssid()
 
             if not active_connection:
-                return False, "No active connection found to disconnect."
+                return False, "No active Wi-Fi connection found to disconnect."
 
-            # Disconnect using the connection name
             result = subprocess.run(
                 f'nmcli connection down "{active_connection}"',
                 shell=True,
@@ -165,7 +163,7 @@ class WlanService:
                 timeout=10,
             )
 
-            if "successfully deactivated" in result.stdout:
+            if "successfully deactivated" in result.stdout.lower():
                 logger.info(f"Successfully disconnected from {active_connection}.")
                 return True, "Disconnection successful."
 
@@ -177,7 +175,9 @@ class WlanService:
             return False, "Disconnection attempt timed out."
         except subprocess.CalledProcessError as e:
             error_message = e.stderr.strip() or e.stdout.strip()
-            logger.error(f"Error disconnecting: {error_message}")
+            logger.error(
+                f"Error disconnecting from {active_connection}: {error_message}"
+            )
             return False, f"System error during disconnection: {error_message}"
         except Exception as e:
             logger.error(f"Unexpected error during disconnection: {e}")

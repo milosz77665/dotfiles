@@ -70,51 +70,38 @@ class BluetoothService:
     def get_discoverable_devices(self):
         discoverable_devices = []
         try:
+            subprocess.run(
+                "bluetoothctl --timeout 5 scan on",
+                shell=True,
+                text=True,
+                stderr=subprocess.DEVNULL,
+            )
+
             output = subprocess.check_output(
-                "hcitool scan",
+                "bluetoothctl devices",
                 shell=True,
                 text=True,
                 stderr=subprocess.PIPE,
             ).strip()
 
-            device_lines = output.splitlines()[1:]
+            device_lines = output.splitlines()
 
             for line in device_lines:
-                match = re.search(
-                    r"^\s*(\w{2}:\w{2}:\w{2}:\w{2}:\w{2}:\w{2})\s*(.*)$", line
+                match = re.match(
+                    r"Device (\w{2}:\w{2}:\w{2}:\w{2}:\w{2}:\w{2}) (.*)", line
                 )
                 if match:
                     mac, name = match.groups()
-
-                    info_output = subprocess.getoutput(f"bluetoothctl info {mac}")
-
-                    connected_match = re.search(r"Connected: (.+)", info_output)
-                    connected = (
-                        connected_match.group(1).strip() == "yes"
-                        if connected_match
-                        else False
-                    )
-
-                    paired_match = re.search(r"Paired: (.+)", info_output)
-                    paired = (
-                        paired_match.group(1).strip() == "yes"
-                        if paired_match
-                        else False
-                    )
 
                     discoverable_devices.append(
                         {
                             "MAC": mac,
                             "name": name.strip(),
-                            "connected": connected,
-                            "paired": paired,
                         }
                     )
 
         except subprocess.CalledProcessError as e:
-            logger.error(
-                f"Error using hcitool scan (maybe missing hcitool or permissions): {e.stderr}"
-            )
+            logger.error(f"Error using bluetoothctl: {e.stderr}")
         except Exception as e:
             logger.error(
                 f"Unexpected error getting discoverable Bluetooth devices: {e}"
@@ -144,13 +131,6 @@ class BluetoothService:
 
                         info_output = subprocess.getoutput(f"bluetoothctl info {mac}")
 
-                        connected_match = re.search(r"Connected: (.+)", info_output)
-                        connected = (
-                            connected_match.group(1).strip() == "yes"
-                            if connected_match
-                            else False
-                        )
-
                         battery_match = re.search(
                             r"Battery Percentage: 0x[0-9a-fA-F]+ \((\d+)\)", info_output
                         )
@@ -162,7 +142,6 @@ class BluetoothService:
                             {
                                 "MAC": mac,
                                 "name": name.strip(),
-                                "connected": connected,
                                 "battery": battery_percentage,
                             }
                         )
@@ -176,8 +155,23 @@ class BluetoothService:
 
     def connect_device(self, mac_address):
         try:
-            logger.info(f"Attempting to connect to {mac_address}...")
+            paired_macs = [d["MAC"] for d in self.get_paired_devices()]
+            if mac_address not in paired_macs:
+                logger.info(f"Trusting and pairing new device {mac_address}...")
+                subprocess.run(
+                    f"bluetoothctl trust {mac_address}", shell=True, check=True
+                )
+                subprocess.run(
+                    f"bluetoothctl pair {mac_address}",
+                    shell=True,
+                    check=True,
+                    timeout=20,
+                    stdout=subprocess.PIPE,
+                    stderr=subprocess.PIPE,
+                    text=True,
+                )
 
+            logger.info(f"Connecting to {mac_address}...")
             result = subprocess.run(
                 f"bluetoothctl connect {mac_address}",
                 shell=True,
@@ -193,7 +187,6 @@ class BluetoothService:
                 return True, "Connection successful."
 
             error_output = result.stderr.strip() or result.stdout.strip()
-
             return False, f"Connection error: {error_output}"
 
         except subprocess.TimeoutExpired:

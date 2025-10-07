@@ -1,6 +1,7 @@
 from libqtile.lazy import lazy
 from qtile_extras.popup import PopupAbsoluteLayout, PopupText, PopupImage
 import threading
+import subprocess
 
 from ..variables import BAR_FOREGROUND, BAR_BACKGROUND, ASSSETS_PATH
 from ..services.BatteryService import battery_service
@@ -108,6 +109,53 @@ class MenuPopup:
 
         return extra_height
 
+    def _disconnect_bt_device(self, mac):
+        bt_service.disconnect_device(mac)
+        self._schedule_refresh()
+
+    def _disconnect_current_network(self):
+        wlan_service.disconnect_from_network()
+        self._schedule_refresh()
+
+    def _connect_to_bt_device(self, mac):
+        bt_service.connect_device(mac)
+        self._schedule_refresh()
+
+    def _connect_to_network(self, ssid, security):
+        result = wlan_service.connect_to_network(ssid)
+        if result:
+            self._schedule_refresh()
+            return
+        sec = (security or "").upper()
+        if any(x in sec for x in ("WPA", "WEP", "PSK")):
+            self._ask_password_for_ssid(ssid)
+        else:
+            try:
+                wlan_service.connect_to_network(ssid)
+            except Exception as e:
+                print("WiFi connect error:", e)
+            self._schedule_refresh()
+
+    def _ask_password_for_ssid(self, ssid):
+        def worker():
+            try:
+                result = subprocess.run(
+                    ["rofi", "-dmenu", "-password", "-p", f"Hasło do {ssid}:"],
+                    capture_output=True,
+                    text=True,
+                )
+                password = result.stdout.strip()
+                if password:
+                    try:
+                        wlan_service.connect_to_network(ssid, password=password)
+                    except TypeError:
+                        wlan_service.connect_to_network(ssid, password)
+                self._schedule_refresh()
+            except Exception as e:
+                print("Password prompt error:", e)
+
+        threading.Thread(target=worker, daemon=True).start()
+
     def _create_layout(self, qtile):
         self.qtile = qtile
         controls = []
@@ -187,8 +235,13 @@ class MenuPopup:
                     / 2,
                     height=section_height,
                     fontsize=16,
-                    h_align="center",
+                    can_focus=True,
+                    highlight=self.HIGHLIGHT_COLOR,
+                    highlight_method="border",
+                    highlight_border=0.5,
+                    h_align="left",
                     v_align="middle",
+                    mouse_callbacks={"Button1": self._disconnect_current_network},
                 )
             )
             controls.append(
@@ -196,14 +249,14 @@ class MenuPopup:
                     text=ip_address,
                     pos_x=padding_x
                     + 2 * icon_width
-                    + 2 * margin_x
+                    + 3 * margin_x
                     + (popup_width - 2 * padding_x - 2 * margin_x - 2 * icon_width) / 2,
                     pos_y=padding_y,
-                    width=(popup_width - 2 * padding_x - 2 * margin_x - 2 * icon_width)
+                    width=(popup_width - 2 * padding_x - 3 * margin_x - 2 * icon_width)
                     / 2,
                     height=section_height,
                     fontsize=16,
-                    h_align="center",
+                    h_align="left",
                     v_align="middle",
                 )
             )
@@ -252,9 +305,9 @@ class MenuPopup:
                                 highlight_method="border",
                                 highlight_border=0.5,
                                 mouse_callbacks={
-                                    "Button1": lazy.function(
-                                        lambda q, s=ssid: wlan_service.connect_to_network(
-                                            s
+                                    "Button1": (
+                                        lambda s=ssid, sec=security: self._connect_to_network(
+                                            s, sec
                                         )
                                     )
                                 },
@@ -353,7 +406,7 @@ class MenuPopup:
                 for mac in connected_devices:
                     controls.append(
                         PopupText(
-                            text=f"{connected_devices[mac]["name"]} {connected_devices[mac]["battery"]}%",
+                            text=f"{connected_devices[mac]["name"]} - {connected_devices[mac]["battery"]}%",
                             pos_x=padding_x + 2 * icon_width + 2 * margin_x,
                             pos_y=bt_section_pos_y
                             + i * (list_margin_y + section_height),
@@ -368,9 +421,7 @@ class MenuPopup:
                             highlight_method="border",
                             highlight_border=0.5,
                             mouse_callbacks={
-                                "Button1": lambda q, m=mac: bt_service.disconnect_device(
-                                    m
-                                )
+                                "Button1": lambda m=mac: self._disconnect_bt_device(m)
                             },
                         )
                     )
@@ -421,7 +472,7 @@ class MenuPopup:
                                 highlight_method="border",
                                 highlight_border=0.5,
                                 mouse_callbacks={
-                                    "Button1": lambda q, m=mac: bt_service.connect_device(
+                                    "Button1": lambda m=mac: self._connect_to_bt_device(
                                         m
                                     ),
                                 },
@@ -570,31 +621,35 @@ class MenuPopup:
         )
 
         ########################################################
-        ################## BRIGHTNESS SECTION ##################
+        ################ AIRPLANE MODE SECTION #################
         ########################################################
-        brightness_section_pos_x = mic_section_pos_x + section_width + margin_x
-        brightness_filename = "brightness.svg"
+        is_airplane_mode_enabled = airplane_mode_service.get_status()
+        airplane_mode_text = "ON" if is_airplane_mode_enabled else "OFF"
 
+        airplane_mode_section_pos_x = mic_section_pos_x + section_width + margin_x
         controls.append(
-            PopupImage(
-                filename=self.ASSETS_PATH + brightness_filename,
-                pos_x=brightness_section_pos_x,
+            PopupText(
+                text="󰀝",
+                pos_x=airplane_mode_section_pos_x,
                 pos_y=icons_section_pos_y,
                 width=section_width,
                 height=section_height,
                 mask=True,
-                can_focus=True,
                 colour=self.MASK_COLOR,
                 highlight=self.HIGHLIGHT_COLOR,
                 highlight_method="border",
                 highlight_border=0.5,
+                fontsize=30,
+                h_align="center",
+                v_align="middle",
+                mouse_callbacks={"Button1": self.airplane_mode_toggle},
             ),
         )
 
         controls.append(
             PopupText(
-                text=brightness_text,
-                pos_x=brightness_section_pos_x,
+                text=airplane_mode_text,
+                pos_x=airplane_mode_section_pos_x,
                 pos_y=value_section_pos_y,
                 width=section_width,
                 height=section_height,
@@ -633,7 +688,7 @@ class MenuPopup:
                 width=section_width,
                 height=section_height,
                 mask=True,
-                can_focus=True,
+                can_focus=False,
                 colour=self.MASK_COLOR,
                 highlight=self.HIGHLIGHT_COLOR,
                 highlight_method="border",
@@ -658,33 +713,29 @@ class MenuPopup:
         )
 
         ########################################################
-        ################ AIRPLANE MODE SECTION #################
+        ################## BRIGHTNESS SECTION ##################
         ########################################################
-        is_airplane_mode_enabled = airplane_mode_service.get_status()
-        airplane_mode_text = "ON" if is_airplane_mode_enabled else "OFF"
+        brightness_filename = "brightness.svg"
 
         controls.append(
-            PopupText(
-                text="󰀝",
+            PopupImage(
+                filename=self.ASSETS_PATH + brightness_filename,
                 pos_x=padding_x + section_width + margin_x,
                 pos_y=second_icons_section_pos_y,
                 width=section_width,
                 height=section_height,
                 mask=True,
+                can_focus=False,
                 colour=self.MASK_COLOR,
                 highlight=self.HIGHLIGHT_COLOR,
                 highlight_method="border",
                 highlight_border=0.5,
-                fontsize=24,
-                h_align="center",
-                v_align="middle",
-                mouse_callbacks={"Button1": self.airplane_mode_toggle},
             ),
         )
 
         controls.append(
             PopupText(
-                text=airplane_mode_text,
+                text=brightness_text,
                 pos_x=padding_x + section_width + margin_x,
                 pos_y=second_value_section_pos_y,
                 width=section_width,
@@ -775,10 +826,7 @@ class MenuPopup:
             self.available_bt_devices = []
 
             def worker():
-                devices = (
-                    bt_service.get_paired_devices()
-                    + bt_service.get_discoverable_devices()
-                )
+                devices = bt_service.get_discoverable_devices()
                 self.available_bt_devices = devices
                 self._schedule_refresh()
 
