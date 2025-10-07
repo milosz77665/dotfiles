@@ -120,16 +120,22 @@ class PowerMenuPopup:
 
         self.layout.bind_callbacks(close={"Escape": self._hide})
 
+    def _show(self, qtile):
+        self._create_layout(qtile)
+        self.layout.show(centered=True)
+        self.is_visible = True
+
     def _hide(self):
         if self.layout:
-            self.layout.hide()
-        self.is_visible = False
+            try:
+                self.layout.hide()
+                self.is_visible = False
+            except Exception:
+                pass
 
     def toggle(self, qtile):
         if not self.is_visible:
-            self._create_layout(qtile)
-            self.layout.show(centered=True)
-            self.is_visible = True
+            self._show(qtile)
         else:
             self._hide()
 

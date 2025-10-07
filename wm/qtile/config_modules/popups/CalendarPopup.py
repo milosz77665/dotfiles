@@ -71,28 +71,13 @@ class CalendarPopup:
 
     def prev_month(self):
         self.focused_arrow_index = 0
-        if self.layout:
-            try:
-                self.layout.hide()
-            except Exception:
-                pass
         self._decrement_month_year()
-        self._create_layout(self.qtile)
-
-        self.layout.show(relative_to=3, relative_to_bar=True)
-        self.is_visible = True
+        self._refresh_layout()
 
     def next_month(self):
         self.focused_arrow_index = 1
-        if self.layout:
-            try:
-                self.layout.hide()
-            except Exception:
-                pass
         self._increment_month_year()
-        self._create_layout(self.qtile)
-        self.layout.show(relative_to=3, relative_to_bar=True)
-        self.is_visible = True
+        self._refresh_layout()
 
     def _create_layout(self, qtile):
         self.qtile = qtile
@@ -225,19 +210,28 @@ class CalendarPopup:
 
         self.layout.bind_callbacks(close={"Escape": self._hide})
 
+    def _refresh_layout(self):
+        self._hide()
+        self._show(self.qtile)
+
+    def _show(self, qtile):
+        self._create_layout(qtile)
+        self.layout.show(relative_to=3, relative_to_bar=True)
+        self.is_visible = True
+
     def _hide(self):
         if self.layout:
-            self.layout.hide()
-        self.is_visible = False
+            try:
+                self.layout.hide()
+                self.is_visible = False
+            except Exception:
+                pass
 
     def toggle(self, qtile):
         if not self.is_visible:
             self.displayed_month = self.current_date.month
             self.displayed_year = self.current_date.year
-
-            self._create_layout(qtile)
-            self.layout.show(relative_to=3, relative_to_bar=True)
-            self.is_visible = True
+            self._show(qtile)
         else:
             self._hide()
 
