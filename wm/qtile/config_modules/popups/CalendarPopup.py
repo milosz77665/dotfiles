@@ -205,13 +205,11 @@ class CalendarPopup:
             close_on_click=True,
         )
 
-        self.layout.bind_callbacks(close={"Escape": self._hide})
-
     def _refresh_layout(self):
         focused_index = 1
         if self.layout and self.layout._focused is not None:
             focused_index = self.layout.focusable_controls.index(self.layout._focused)
-        self._hide()
+        self.hide()
         self._show(self.qtile, focused_index)
 
     def _show(self, qtile, focused_index=1):
@@ -219,7 +217,7 @@ class CalendarPopup:
         self.layout.show(relative_to=3, relative_to_bar=True)
         self.is_visible = True
 
-    def _hide(self):
+    def hide(self):
         if self.layout:
             try:
                 self.layout.hide()
@@ -233,7 +231,7 @@ class CalendarPopup:
             self.displayed_year = self.current_date.year
             self._show(qtile)
         else:
-            self._hide()
+            self.hide()
 
 
 calendar_popup = CalendarPopup()

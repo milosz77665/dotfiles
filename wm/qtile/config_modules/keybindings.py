@@ -21,6 +21,15 @@ if not TERMINAL:
     TERMINAL = guess_terminal()
 
 
+def close_all_popups(qtile):
+    if calendar_popup.is_visible:
+        calendar_popup.hide()
+    if power_menu_popup.is_visible:
+        power_menu_popup.hide()
+    if menu_popup.is_visible:
+        menu_popup.hide()
+
+
 def run_service_function(function, *args):
     if menu_popup.is_visible:
         menu_popup.hide()
@@ -74,6 +83,12 @@ keys = [
         "u",
         lazy.function(lambda qtile: menu_popup.toggle(qtile)),
         desc="Toggle menu popup",
+    ),
+    Key(
+        [],
+        "Escape",
+        lazy.function(close_all_popups),
+        desc="Close all popups",
     ),
     #############################
     ####### Function Keys #######
