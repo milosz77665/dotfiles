@@ -202,7 +202,6 @@ class CalendarPopup:
             controls=controls,
             initial_focus=focused_index,
             background=self.COLOR_BACKGROUND,
-            initial_focus=self.focused_arrow_index,
             close_on_click=True,
         )
 
