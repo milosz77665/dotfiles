@@ -1,3 +1,4 @@
+import re
 import subprocess
 from libqtile.log_utils import logger
 
@@ -13,8 +14,7 @@ class WlanService:
     def get_status(self):
         try:
             output = subprocess.check_output(
-                f"nmcli radio wifi",
-                shell=True,
+                ["nmcli", "radio", "wifi"],
                 text=True,
                 stderr=subprocess.PIPE,
             ).strip()
@@ -29,12 +29,19 @@ class WlanService:
     def get_ssid(self):
         try:
             output = subprocess.check_output(
-                f"nmcli -t -f active,ssid dev wifi list | grep -E '^yes|^tak' | cut -d':' -f2",
-                shell=True,
+                ["nmcli", "-t", "-f", "active,ssid", "dev", "wifi", "list"],
                 text=True,
                 stderr=subprocess.PIPE,
             ).strip()
-            return output if output else None
+            ssid = None
+            for line in output.splitlines():
+                if not line:
+                    continue
+                parts = line.split(":", 1)
+                if parts and parts[0] in ("yes", "tak", "1"):
+                    ssid = parts[1] if len(parts) > 1 else None
+                    break
+            return ssid
         except subprocess.CalledProcessError:
             return None
         except Exception as e:
@@ -44,13 +51,13 @@ class WlanService:
     def get_ip_address(self):
         try:
             output = subprocess.check_output(
-                f"ip -4 addr show {self.interface}"
-                + "| grep -oP '(?<=inet\s)\d+(\.\d+){3}'",
-                shell=True,
+                ["ip", "-4", "addr", "show", self.interface],
                 text=True,
                 stderr=subprocess.PIPE,
             ).strip()
-            return output if output else None
+            m = re.search(r"inet\s+(\d+(?:\.\d+){3})", output)
+            ip_addr = m.group(1) if m else ""
+            return ip_addr
         except subprocess.CalledProcessError:
             return None
         except Exception as e:
@@ -60,14 +67,25 @@ class WlanService:
     def get_signal_strength(self):
         try:
             output = subprocess.check_output(
-                f"nmcli -t -f signal dev wifi list ifname {self.interface} | head -n 1",
-                shell=True,
+                [
+                    "nmcli",
+                    "-t",
+                    "-f",
+                    "signal",
+                    "dev",
+                    "wifi",
+                    "list",
+                    "ifname",
+                    self.interface,
+                ],
                 text=True,
                 stderr=subprocess.PIPE,
             ).strip()
-            if output.isdigit():
-                return int(output)
-            return 0
+            first_line = output.splitlines()[0] if output.splitlines() else ""
+            signal = 0
+            if first_line.strip().isdigit():
+                signal = int(first_line.strip())
+            return signal
         except Exception as e:
             logger.error(f"Error reading signal strength: {e}")
             return 0
@@ -76,30 +94,29 @@ class WlanService:
         networks = []
         try:
             output = subprocess.check_output(
-                f"nmcli -t -f ssid,signal,security dev wifi list --rescan yes",
-                shell=True,
+                [
+                    "nmcli",
+                    "-t",
+                    "-f",
+                    "ssid,signal,security",
+                    "dev",
+                    "wifi",
+                    "list",
+                    "--rescan",
+                    "yes",
+                ],
                 text=True,
                 stderr=subprocess.PIPE,
             ).strip()
-
-            seen_ssids = set()
+            networks = []
             for line in output.splitlines():
-                if line.strip():
-                    parts = line.split(":")
-                    if len(parts) >= 3:
-                        ssid = parts[0].strip()
-                        signal = parts[1].strip()
-                        security = parts[2].strip()
+                if not line:
+                    continue
+                ssid, signal, security = (line.split(":", 2) + [""] * 3)[:3]
+                networks.append(
+                    {"ssid": ssid, "signal": int(signal), "security": security}
+                )
 
-                        if ssid not in seen_ssids:
-                            networks.append(
-                                {
-                                    "ssid": ssid,
-                                    "signal": int(signal) if signal.isdigit() else 0,
-                                    "security": security if security else "None",
-                                }
-                            )
-                            seen_ssids.add(ssid)
         except subprocess.CalledProcessError as e:
             logger.warning(f"Error listing Wi-Fi networks: {e.stderr}")
         except Exception as e:
@@ -109,14 +126,12 @@ class WlanService:
 
     def connect_to_network(self, ssid, password=None):
         try:
-            base_command = f'nmcli dev wifi connect "{ssid}"'
-            command = base_command
+            command = ["nmcli", "dev", "wifi", "connect", ssid]
             if password:
-                command += f' password "{password}"'
+                command += ["password", password]
 
             result = subprocess.run(
                 command,
-                shell=True,
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,
                 text=True,
@@ -154,8 +169,7 @@ class WlanService:
                 return False, "No active Wi-Fi connection found to disconnect."
 
             result = subprocess.run(
-                f'nmcli connection down "{active_connection}"',
-                shell=True,
+                ["nmcli", "connection", "down", active_connection],
                 check=True,
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,

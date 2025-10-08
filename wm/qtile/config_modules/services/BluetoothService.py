@@ -7,12 +7,13 @@ class BluetoothService:
     def get_status(self):
         try:
             output = subprocess.check_output(
-                "bluetoothctl show | grep -oP 'Powered: \\K(yes|no)'",
-                shell=True,
+                ["bluetoothctl", "show"],
                 text=True,
                 stderr=subprocess.PIPE,
             ).strip()
-            return output == "yes"
+            m = re.search(r"Powered:\s*(yes|no)", output)
+            powered = m.group(1) if m else None
+            return powered == "yes"
         except subprocess.CalledProcessError as e:
             logger.error(f"Error checking Bluetooth status: {e.stderr}")
             return " ERR"
@@ -24,8 +25,7 @@ class BluetoothService:
         connected_devices = {}
         try:
             devices_output = subprocess.check_output(
-                "bluetoothctl devices",
-                shell=True,
+                ["bluetoothctl", "devices"],
                 text=True,
                 stderr=subprocess.PIPE,
             ).strip()
@@ -36,8 +36,7 @@ class BluetoothService:
 
             for mac in device_macs:
                 info_output = subprocess.check_output(
-                    f"bluetoothctl info {mac}",
-                    shell=True,
+                    ["bluetoothctl", "info", f"{mac}"],
                     text=True,
                     stderr=subprocess.PIPE,
                 ).strip()
@@ -71,15 +70,13 @@ class BluetoothService:
         discoverable_devices = []
         try:
             subprocess.run(
-                "bluetoothctl --timeout 5 scan on",
-                shell=True,
+                ["bluetoothctl", "--timeout", "5", "scan", "on"],
                 text=True,
                 stderr=subprocess.DEVNULL,
             )
 
             output = subprocess.check_output(
-                "bluetoothctl devices",
-                shell=True,
+                ["bluetoothctl", "devices"],
                 text=True,
                 stderr=subprocess.PIPE,
             ).strip()
@@ -113,8 +110,7 @@ class BluetoothService:
         paired_devices = []
         try:
             devices_output = subprocess.check_output(
-                "bluetoothctl devices Paired",
-                shell=True,
+                ["bluetoothctl", "devices", "Paired"],
                 text=True,
                 stderr=subprocess.PIPE,
             ).strip()
@@ -129,7 +125,11 @@ class BluetoothService:
                     if match:
                         mac, name = match.groups()
 
-                        info_output = subprocess.getoutput(f"bluetoothctl info {mac}")
+                        info_output = subprocess.check_output(
+                            ["bluetoothctl", "info", f"{mac}"],
+                            text=True,
+                            stderr=subprocess.PIPE,
+                        ).strip()
 
                         battery_match = re.search(
                             r"Battery Percentage: 0x[0-9a-fA-F]+ \((\d+)\)", info_output
@@ -158,12 +158,9 @@ class BluetoothService:
             paired_macs = [d["MAC"] for d in self.get_paired_devices()]
             if mac_address not in paired_macs:
                 logger.info(f"Trusting and pairing new device {mac_address}...")
+                subprocess.run(["bluetoothctl", "trust", mac_address], check=True)
                 subprocess.run(
-                    f"bluetoothctl trust {mac_address}", shell=True, check=True
-                )
-                subprocess.run(
-                    f"bluetoothctl pair {mac_address}",
-                    shell=True,
+                    ["bluetoothctl", "pair", mac_address],
                     check=True,
                     timeout=20,
                     stdout=subprocess.PIPE,
@@ -173,8 +170,7 @@ class BluetoothService:
 
             logger.info(f"Connecting to {mac_address}...")
             result = subprocess.run(
-                f"bluetoothctl connect {mac_address}",
-                shell=True,
+                ["bluetoothctl", "connect", mac_address],
                 check=True,
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,
@@ -205,8 +201,7 @@ class BluetoothService:
             logger.info(f"Attempting to disconnect from {mac_address}...")
 
             result = subprocess.run(
-                f"bluetoothctl disconnect {mac_address}",
-                shell=True,
+                ["bluetoothctl", "disconnect", mac_address],
                 check=True,
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,

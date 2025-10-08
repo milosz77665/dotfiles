@@ -1,3 +1,4 @@
+import re
 import subprocess
 from libqtile.log_utils import logger
 
@@ -11,11 +12,14 @@ class VolumeService:
     def get_volume(self):
         try:
             output = subprocess.check_output(
-                f"amixer get {self.channel} | grep -o '[0-9]\\+%' | head -1",
-                shell=True,
+                ["amixer", "get", self.channel],
                 text=True,
+                stderr=subprocess.PIPE,
             ).strip()
-            return int(output.strip("%"))
+
+            m = re.search(r"(\d+)%", output)
+            volume = int(m.group(1)) if m else None
+            return volume
         except Exception as e:
             logger.error(f"VolumeService: Error getting volume: {e}")
             return 0
@@ -23,32 +27,34 @@ class VolumeService:
     def is_muted(self):
         try:
             output = subprocess.check_output(
-                f"amixer get {self.channel} | grep -o '\\[off\\]' || true",
-                shell=True,
+                ["amixer", "get", self.channel],
                 text=True,
+                stderr=subprocess.PIPE,
             ).strip()
-            return bool(output)
+            lines = output.splitlines()
+            last_line = lines[-1] if lines else ""
+            muted = bool(re.search(r"\[off\]", last_line))
+            return muted
         except Exception as e:
             logger.error(f"VolumeService: Error checking mute status: {e}")
             return False
 
     def toggle_mute(self):
         try:
-            subprocess.run(f"amixer set {self.channel} toggle", shell=True, check=True)
+            subprocess.run(["amixer", "set", self.channel, "toggle"], check=True)
             return True
         except Exception as e:
             logger.error(f"VolumeService: Error toggling mute: {e}")
             return False
 
     def change_volume(self, direction="up", amount=2):
-        command = f"amixer set {self.channel} {amount}%"
+        arg = f"{amount}%"
         if direction == "up":
-            command += "+"
+            arg += "+"
         elif direction == "down":
-            command += "-"
-
+            arg += "-"
         try:
-            subprocess.run(command, shell=True, check=True)
+            subprocess.run(["amixer", "set", self.channel, arg], check=True)
             return True
         except Exception as e:
             logger.error(f"VolumeService: Error changing volume: {e}")
