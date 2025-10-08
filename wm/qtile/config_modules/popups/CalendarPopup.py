@@ -27,7 +27,6 @@ class CalendarPopup:
         self.current_date = datetime.now().date()
         self.displayed_month = self.current_date.month
         self.displayed_year = self.current_date.year
-        self.focused_arrow_index = 1
         self.layout = None
         self.qtile = None
 
@@ -70,16 +69,14 @@ class CalendarPopup:
         return text, color
 
     def prev_month(self):
-        self.focused_arrow_index = 0
         self._decrement_month_year()
         self._refresh_layout()
 
     def next_month(self):
-        self.focused_arrow_index = 1
         self._increment_month_year()
         self._refresh_layout()
 
-    def _create_layout(self, qtile):
+    def _create_layout(self, qtile, focused_index=1):
         self.qtile = qtile
         controls = []
 
@@ -203,6 +200,7 @@ class CalendarPopup:
             # border=self.COLOR_FOREGROUND,
             # border_width=1,
             controls=controls,
+            initial_focus=focused_index,
             background=self.COLOR_BACKGROUND,
             initial_focus=self.focused_arrow_index,
             close_on_click=True,
@@ -211,11 +209,14 @@ class CalendarPopup:
         self.layout.bind_callbacks(close={"Escape": self._hide})
 
     def _refresh_layout(self):
+        focused_index = 1
+        if self.layout and self.layout._focused is not None:
+            focused_index = self.layout.focusable_controls.index(self.layout._focused)
         self._hide()
-        self._show(self.qtile)
+        self._show(self.qtile, focused_index)
 
-    def _show(self, qtile):
-        self._create_layout(qtile)
+    def _show(self, qtile, focused_index=1):
+        self._create_layout(qtile, focused_index)
         self.layout.show(relative_to=3, relative_to_bar=True)
         self.is_visible = True
 

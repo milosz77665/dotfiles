@@ -1,5 +1,6 @@
 from libqtile.lazy import lazy
-from qtile_extras.popup import PopupAbsoluteLayout, PopupText, PopupImage
+from qtile_extras.popup import PopupAbsoluteLayout, PopupText, PopupImage, PopupWidget
+from qtile_extras import widget
 import threading
 import subprocess
 
@@ -22,7 +23,6 @@ class MenuPopup:
         mask_color=BAR_FOREGROUND,
         assets_path=ASSSETS_PATH,
     ):
-        self.focused_index = 0
         self.layout = None
         self.qtile = None
         self.is_visible = False
@@ -156,7 +156,7 @@ class MenuPopup:
 
         threading.Thread(target=worker, daemon=True).start()
 
-    def _create_layout(self, qtile):
+    def _create_layout(self, qtile, focused_index=0):
         self.qtile = qtile
         controls = []
 
@@ -179,10 +179,23 @@ class MenuPopup:
         wlan_extra_height = self._calculate_wlan_extra_height(section_height)
         bt_connected_extra = 0
 
+        controls.append(
+            PopupWidget(
+                widget=widget.Clock(format="%H:%M:%S %d.%m.%Y", fontsize=25),
+                pos_x=popup_width // 2 - 300 // 2,
+                pos_y=padding_y,
+                width=300,
+                height=section_height,
+                h_align="center",
+                v_align="middle",
+            ),
+        )
+
         ########################################################
         ###################### WLAN SECTION ####################
         ########################################################
         is_wifi_enabled = wlan_service.get_status()
+        wlan_section_pos_y = padding_y + section_height + margin_y
 
         if is_wifi_enabled:
             ssid = wlan_service.get_ssid()
@@ -196,7 +209,7 @@ class MenuPopup:
                 PopupText(
                     text="▼" if self.is_wlan_list_expanded else "▶",
                     pos_x=padding_x,
-                    pos_y=padding_y,
+                    pos_y=wlan_section_pos_y,
                     width=icon_width,
                     height=section_height,
                     fontsize=12,
@@ -213,7 +226,7 @@ class MenuPopup:
                 PopupText(
                     text=wlan_icon,
                     pos_x=padding_x + icon_width + margin_x,
-                    pos_y=padding_y,
+                    pos_y=wlan_section_pos_y,
                     width=icon_width,
                     height=section_height,
                     fontsize=18,
@@ -230,7 +243,7 @@ class MenuPopup:
                 PopupText(
                     text=ssid,
                     pos_x=padding_x + 2 * icon_width + 2 * margin_x,
-                    pos_y=padding_y,
+                    pos_y=wlan_section_pos_y,
                     width=(popup_width - 2 * padding_x - 2 * margin_x - 2 * icon_width)
                     / 2,
                     height=section_height,
@@ -239,7 +252,7 @@ class MenuPopup:
                     highlight=self.HIGHLIGHT_COLOR,
                     highlight_method="border",
                     highlight_border=0.5,
-                    h_align="left",
+                    h_align="center",
                     v_align="middle",
                     mouse_callbacks={"Button1": self._disconnect_current_network},
                 )
@@ -251,18 +264,18 @@ class MenuPopup:
                     + 2 * icon_width
                     + 3 * margin_x
                     + (popup_width - 2 * padding_x - 2 * margin_x - 2 * icon_width) / 2,
-                    pos_y=padding_y,
+                    pos_y=wlan_section_pos_y,
                     width=(popup_width - 2 * padding_x - 3 * margin_x - 2 * icon_width)
                     / 2,
                     height=section_height,
                     fontsize=16,
-                    h_align="left",
+                    h_align="center",
                     v_align="middle",
                 )
             )
 
             if self.is_wlan_list_expanded:
-                wlan_list_pos_y = padding_y + section_height + list_margin_y
+                wlan_list_pos_y = wlan_section_pos_y + section_height + list_margin_y
 
                 if not self.available_networks:
                     controls.append(
@@ -344,8 +357,8 @@ class MenuPopup:
                 PopupText(
                     text="󰤭",
                     pos_x=padding_x,
-                    pos_y=padding_y,
-                    width=icon_width,
+                    pos_y=wlan_section_pos_y,
+                    width=popup_width - 2 * padding_x,
                     height=section_height,
                     fontsize=18,
                     can_focus=True,
@@ -362,7 +375,9 @@ class MenuPopup:
         ################### BLUETOOTH SECTION ##################
         ########################################################
         is_bt_enabled = bt_service.get_status()
-        bt_section_pos_y = padding_y + section_height + margin_y + wlan_extra_height
+        bt_section_pos_y = (
+            wlan_section_pos_y + section_height + margin_y + wlan_extra_height
+        )
 
         if is_bt_enabled:
             connected_devices = bt_service.get_connected_devices()
@@ -414,7 +429,7 @@ class MenuPopup:
                             - (2 * padding_x + 2 * margin_x + 2 * icon_width),
                             height=section_height,
                             fontsize=16,
-                            h_align="left",
+                            h_align="center",
                             v_align="middle",
                             can_focus=True,
                             highlight=self.HIGHLIGHT_COLOR,
@@ -523,7 +538,7 @@ class MenuPopup:
                     text="󰂲",
                     pos_x=padding_x,
                     pos_y=bt_section_pos_y,
-                    width=icon_width,
+                    width=popup_width - 2 * padding_x,
                     height=section_height,
                     fontsize=18,
                     can_focus=True,
@@ -701,7 +716,7 @@ class MenuPopup:
 
         controls.append(
             PopupText(
-                text=f"{bat_time}  {bat_capacity}",
+                text=f"{bat_time if len(bat_time)>0 else ''}   {bat_capacity}",
                 pos_x=padding_x,
                 pos_y=second_value_section_pos_y,
                 width=section_width,
@@ -753,7 +768,7 @@ class MenuPopup:
             width=popup_width,
             height=popup_height,
             controls=controls,
-            initial_focus=self.focused_index,
+            initial_focus=focused_index,
             background=self.POPUP_COLOR,
             close_on_click=False,
         )
@@ -777,36 +792,30 @@ class MenuPopup:
         self._refresh_layout()
 
     def volume_mute_toggle(self):
-        self.focused_index = 4
         volume_service.toggle_mute()
         self._refresh_layout()
 
     def mic_volume_mute_toggle(self):
-        self.focused_index = 5
         mic_service.toggle_mute()
         self._refresh_layout()
 
     def airplane_mode_toggle(self):
-        self.focused_index = 8
         airplane_mode_service.toggle_airplane_mode(self.qtile)
         self._refresh_layout()
 
     def _toggle_wifi_state(self):
-        self.focused_index = 1
         if self.is_wlan_list_expanded:
             self.is_wlan_list_expanded = False
         wlan_service.toggle_state(self.qtile)
         self._schedule_refresh(1.0)
 
     def _toggle_bt_state(self):
-        self.focused_index = 3
         if self.is_bt_list_expanded:
             self.is_bt_list_expanded = False
         bt_service.toggle_state(self.qtile)
         self._schedule_refresh(1.0)
 
     def _toggle_wifi_list(self):
-        self.focused_index = 0
         self.is_wlan_list_expanded = not self.is_wlan_list_expanded
         if self.is_wlan_list_expanded:
             self.available_networks = []
@@ -820,7 +829,6 @@ class MenuPopup:
         self._refresh_layout()
 
     def _toggle_bt_list(self):
-        self.focused_index = 2
         self.is_bt_list_expanded = not self.is_bt_list_expanded
         if self.is_bt_list_expanded:
             self.available_bt_devices = []
@@ -840,11 +848,14 @@ class MenuPopup:
         ).start()
 
     def _refresh_layout(self):
+        focused_index = 0
+        if self.layout and self.layout._focused is not None:
+            focused_index = self.layout.focusable_controls.index(self.layout._focused)
         self._hide()
-        self._show(self.qtile)
+        self._show(self.qtile, focused_index)
 
-    def _show(self, qtile):
-        self._create_layout(qtile)
+    def _show(self, qtile, focused_index=0):
+        self._create_layout(qtile, focused_index)
         self.layout.show(centered=True)
         self.is_visible = True
 
