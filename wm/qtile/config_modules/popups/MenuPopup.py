@@ -28,8 +28,8 @@ class MenuPopup:
         self.is_visible = False
         self.available_networks = []
         self.wlan_page = 0
-        self.wlan_items_per_page = 6
-        self.bt_items_per_page = 6
+        self.wlan_items_per_page = 4
+        self.bt_items_per_page = 4
         self.available_bt_devices = []
         self.bt_page = 0
         self.is_wlan_list_expanded = False
@@ -330,26 +330,37 @@ class MenuPopup:
                     if self.wlan_page > 0:
                         controls.append(
                             PopupText(
-                                text="↑",
-                                pos_x=popup_width - padding_x,
-                                pos_y=wlan_list_pos_y - padding_y,
+                                text="",
+                                pos_x=padding_x,
+                                pos_y=wlan_list_pos_y,
                                 width=20,
                                 height=20,
                                 fontsize=14,
+                                can_focus=True,
+                                highlight=self.HIGHLIGHT_COLOR,
+                                highlight_method="border",
+                                highlight_border=0.5,
                                 mouse_callbacks={"Button1": self._prev_wifi_page},
+                                h_align="center",
+                                v_align="middle",
                             )
                         )
                     if len(self.available_networks) > end:
                         controls.append(
                             PopupText(
-                                text="↓",
-                                pos_x=popup_width - padding_x,
-                                pos_y=wlan_list_pos_y
-                                + self.wlan_items_per_page * (section_height + 5),
+                                text="",
+                                pos_x=padding_x,
+                                pos_y=wlan_list_pos_y + 25,
                                 width=20,
                                 height=20,
                                 fontsize=14,
+                                can_focus=True,
+                                highlight=self.HIGHLIGHT_COLOR,
+                                highlight_method="border",
+                                highlight_border=0.5,
                                 mouse_callbacks={"Button1": self._next_wifi_page},
+                                h_align="center",
+                                v_align="middle",
                             )
                         )
         else:
@@ -497,9 +508,9 @@ class MenuPopup:
                     if self.bt_page > 0:
                         controls.append(
                             PopupText(
-                                text="↑",
-                                pos_x=popup_width - padding_x,
-                                pos_y=bt_list_pos_y - 5,
+                                text="",
+                                pos_x=padding_x,
+                                pos_y=bt_list_pos_y,
                                 width=20,
                                 height=20,
                                 fontsize=14,
@@ -507,18 +518,17 @@ class MenuPopup:
                                 highlight=self.HIGHLIGHT_COLOR,
                                 highlight_method="border",
                                 highlight_border=0.5,
-                                mouse_callbacks={
-                                    "Button1": lazy.function(self._prev_bt_page)
-                                },
+                                mouse_callbacks={"Button1": self._prev_bt_page},
+                                h_align="center",
+                                v_align="middle",
                             )
                         )
                     if len(self.available_bt_devices) > end:
                         controls.append(
                             PopupText(
-                                text="↓",
-                                pos_x=popup_width - padding_x,
-                                pos_y=bt_list_pos_y
-                                + self.bt_items_per_page * (section_height + padding_y),
+                                text="",
+                                pos_x=padding_x,
+                                pos_y=bt_list_pos_y + 25,
                                 width=20,
                                 height=20,
                                 fontsize=14,
@@ -526,9 +536,9 @@ class MenuPopup:
                                 highlight=self.HIGHLIGHT_COLOR,
                                 highlight_method="border",
                                 highlight_border=0.5,
-                                mouse_callbacks={
-                                    "Button1": lazy.function(self._next_bt_page)
-                                },
+                                mouse_callbacks={"Button1": self._next_bt_page},
+                                h_align="center",
+                                v_align="middle",
                             )
                         )
 
@@ -856,7 +866,7 @@ class MenuPopup:
 
     def _show(self, qtile, focused_index=0):
         self._create_layout(qtile, focused_index)
-        self.layout.show(centered=True)
+        self.layout.show(relative_to=2, relative_to_bar=True)
         self.is_visible = True
 
     def _hide(self):
