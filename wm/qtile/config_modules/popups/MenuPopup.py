@@ -861,7 +861,7 @@ class MenuPopup:
         focused_index = 0
         if self.layout and self.layout._focused is not None:
             focused_index = self.layout.focusable_controls.index(self.layout._focused)
-        self._hide()
+        self.hide()
         self._show(self.qtile, focused_index)
 
     def _show(self, qtile, focused_index=0):
@@ -869,7 +869,7 @@ class MenuPopup:
         self.layout.show(relative_to=2, relative_to_bar=True)
         self.is_visible = True
 
-    def _hide(self):
+    def hide(self):
         if self.layout:
             try:
                 self.layout.hide()
@@ -881,7 +881,7 @@ class MenuPopup:
         if not self.is_visible:
             self._show(qtile)
         else:
-            self._hide()
+            self.hide()
 
 
 menu_popup = MenuPopup()

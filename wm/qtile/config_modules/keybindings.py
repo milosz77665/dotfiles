@@ -21,6 +21,12 @@ if not TERMINAL:
     TERMINAL = guess_terminal()
 
 
+def run_service_function(function, *args):
+    if menu_popup.is_visible:
+        menu_popup.hide()
+    function(*args)
+
+
 def change_value_and_show_status(qtile, target, direction, amount):
     if target == "volume":
         volume_service.change_volume(direction, amount)
@@ -31,6 +37,7 @@ def change_value_and_show_status(qtile, target, direction, amount):
     elif target == "mic":
         mic_service.change_volume(direction, amount)
         mic_popup.show(qtile)
+    menu_popup.hide()
 
 
 def toggle_mute_and_show_status(qtile, target):
@@ -40,6 +47,7 @@ def toggle_mute_and_show_status(qtile, target):
     elif target == "mic":
         mic_service.toggle_mute()
         mic_popup.show(qtile)
+    menu_popup.hide()
 
 
 keys = [
@@ -74,7 +82,9 @@ keys = [
         [],
         "XF86MonBrightnessUp",
         lazy.function(
-            lambda qtile: change_value_and_show_status(qtile, "brightness", "up", 5)
+            lambda qtile: run_service_function(
+                change_value_and_show_status, qtile, "brightness", "up", 5
+            )
         ),
         desc="Increase brightness",
     ),
@@ -82,7 +92,9 @@ keys = [
         [],
         "XF86MonBrightnessDown",
         lazy.function(
-            lambda qtile: change_value_and_show_status(qtile, "brightness", "down", 5)
+            lambda qtile: run_service_function(
+                change_value_and_show_status, qtile, "brightness", "down", 5
+            )
         ),
         desc="Decrease brightness",
     ),
@@ -90,7 +102,9 @@ keys = [
         [],
         "XF86AudioRaiseVolume",
         lazy.function(
-            lambda qtile: change_value_and_show_status(qtile, "volume", "up", 2)
+            lambda qtile: run_service_function(
+                change_value_and_show_status, qtile, "volume", "up", 2
+            )
         ),
         desc="Increase volume",
     ),
@@ -98,21 +112,29 @@ keys = [
         [],
         "XF86AudioLowerVolume",
         lazy.function(
-            lambda qtile: change_value_and_show_status(qtile, "volume", "down", 2)
+            lambda qtile: run_service_function(
+                change_value_and_show_status, qtile, "volume", "down", 2
+            )
         ),
         desc="Decrease volume",
     ),
     Key(
         [],
         "XF86AudioMute",
-        lazy.function(lambda qtile: toggle_mute_and_show_status(qtile, "volume")),
+        lazy.function(
+            lambda qtile: run_service_function(
+                toggle_mute_and_show_status, qtile, "volume"
+            )
+        ),
         desc="Toggle mute",
     ),
     Key(
         ["mod1"],
         "XF86AudioRaiseVolume",
         lazy.function(
-            lambda qtile: change_value_and_show_status(qtile, "mic", "up", 2)
+            lambda qtile: run_service_function(
+                change_value_and_show_status, qtile, "mic", "up", 2
+            )
         ),
         desc="Increase mic volume",
     ),
@@ -120,14 +142,20 @@ keys = [
         ["mod1"],
         "XF86AudioLowerVolume",
         lazy.function(
-            lambda qtile: change_value_and_show_status(qtile, "mic", "down", 2)
+            lambda qtile: run_service_function(
+                change_value_and_show_status, qtile, "mic", "down", 2
+            )
         ),
         desc="Decrease mic volume",
     ),
     Key(
         [],
         "XF86AudioMicMute",
-        lazy.function(lambda qtile: toggle_mute_and_show_status(qtile, "mic")),
+        lazy.function(
+            lambda qtile: run_service_function(
+                toggle_mute_and_show_status, qtile, "mic"
+            )
+        ),
         desc="Toggle mic mute",
     ),
     Key(
@@ -169,7 +197,11 @@ keys = [
     Key(
         ["mod1"],
         "s",
-        lazy.function(lambda qtile: airplane_mode_service.toggle_airplane_mode(qtile)),
+        lazy.function(
+            lambda qtile: run_service_function(
+                airplane_mode_service.toggle_airplane_mode, qtile
+            )
+        ),
         desc="Enter airplane mode",
     ),
     ############################
