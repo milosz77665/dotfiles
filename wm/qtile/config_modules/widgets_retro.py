@@ -19,7 +19,9 @@ from .widgets.BluetoothWidget import BluetoothWidget
 from .widgets.WlanWidget import WlanWidget
 from .widgets.VolumeWidget import VolumeWidget
 from .widgets.MicWidget import MicWidget
+from .widgets.NotificationWidget import NotificationWidget
 from .popups.CalendarPopup import calendar_popup
+from .popups.NotificationPopup import notification_popup
 from .decorations.groups import retro_numbers_rules
 
 
@@ -87,6 +89,12 @@ def get_widget_list(is_primary=False):
         modify(MicWidget),
         modify(VolumeWidget),
         modify(BatteryWidget),
+        modify(
+            NotificationWidget,
+            mouse_callbacks={
+                "Button1": lazy.function(lambda qtile: notification_popup.toggle(qtile))
+            },
+        ),
         widget.Clock(
             format="%d/%m/%y %H:%M:%S",
             mouse_callbacks={

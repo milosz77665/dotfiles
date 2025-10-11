@@ -11,6 +11,7 @@ from .popups.MenuPopup import menu_popup
 from .popups.VolumePopup import volume_popup
 from .popups.MicPopup import mic_popup
 from .popups.BrightnessPopup import brightness_popup
+from .popups.NotificationPopup import notification_popup
 from .services.BrightnessService import brightness_service
 from .services.VolumeService import volume_service
 from .services.MicService import mic_service
@@ -26,6 +27,8 @@ def close_all_popups(qtile):
         calendar_popup.hide()
     if power_menu_popup.is_visible:
         power_menu_popup.hide()
+    if notification_popup.is_visible:
+        notification_popup.hide()
     if menu_popup.is_visible:
         menu_popup.hide()
 
@@ -83,6 +86,12 @@ keys = [
         "u",
         lazy.function(lambda qtile: menu_popup.toggle(qtile)),
         desc="Toggle menu popup",
+    ),
+    Key(
+        ["control", "mod1"],
+        "n",
+        lazy.function(lambda qtile: notification_popup.toggle(qtile)),
+        desc="Toggle notification popup",
     ),
     Key(
         [],
