@@ -4,7 +4,7 @@ from qtile_extras import widget
 import threading
 import subprocess
 
-from ..variables import BAR_FOREGROUND, BAR_BACKGROUND, ASSSETS_PATH
+from ..variables import BAR_FOREGROUND, BAR_BACKGROUND, ASSETS_PATH
 from ..services.BatteryService import battery_service
 from ..services.BluetoothService import bt_service
 from ..services.BrightnessService import brightness_service
@@ -21,7 +21,7 @@ class MenuPopup:
         popup_color=BAR_BACKGROUND,
         text_color=BAR_FOREGROUND,
         mask_color=BAR_FOREGROUND,
-        assets_path=ASSSETS_PATH,
+        assets_path=ASSETS_PATH,
     ):
         self.layout = None
         self.qtile = None

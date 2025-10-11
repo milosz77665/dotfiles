@@ -5,7 +5,7 @@ from qtile_extras.popup import (
     PopupText,
 )
 
-from ..variables import BAR_FOREGROUND, BAR_BACKGROUND, ASSSETS_PATH
+from ..variables import BAR_FOREGROUND, BAR_BACKGROUND, ASSETS_PATH
 
 
 class PowerMenuPopup:
@@ -15,7 +15,7 @@ class PowerMenuPopup:
         mask_color=BAR_FOREGROUND,
         text_color=BAR_FOREGROUND,
         popup_color=BAR_BACKGROUND,
-        assets_path=ASSSETS_PATH,
+        assets_path=ASSETS_PATH,
     ):
         self.layout = None
         self.is_visible = False

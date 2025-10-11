@@ -1,6 +1,6 @@
 from qtile_extras.popup import PopupAbsoluteLayout, PopupText, PopupImage
 
-from ..variables import BAR_FOREGROUND, BAR_BACKGROUND, ASSSETS_PATH
+from ..variables import BAR_FOREGROUND, BAR_BACKGROUND, ASSETS_PATH
 
 
 class StatusPopup:
@@ -14,7 +14,7 @@ class StatusPopup:
         popup_color=BAR_BACKGROUND,
         text_color=BAR_FOREGROUND,
         mask_color=BAR_FOREGROUND,
-        assets_path=ASSSETS_PATH,
+        assets_path=ASSETS_PATH,
     ):
         self.value_getter = value_getter
         self.off_getter = off_getter or (lambda: False)
