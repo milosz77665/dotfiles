@@ -1,7 +1,8 @@
+import subprocess
 from libqtile.widget import base
 from qtile_extras.widget.mixins import TooltipMixin
 
-from ..variables import FAST_UPDATE_INTERVAL, TOOLTIP_DEFAULTS
+from ..variables import FAST_UPDATE_INTERVAL, TOOLTIP_DEFAULTS, ASSETS_PATH
 from ..services.BatteryService import battery_service
 
 
@@ -12,6 +13,7 @@ class BatteryWidget(base.ThreadPoolText, TooltipMixin):
         self.add_defaults(TooltipMixin.defaults)
         self.add_defaults(TOOLTIP_DEFAULTS)
         self.update_interval = FAST_UPDATE_INTERVAL
+        self.warning_level = 25
         self.icon_map = [
             (100, "󰁹"),
             (90, "󰂂"),
@@ -31,6 +33,20 @@ class BatteryWidget(base.ThreadPoolText, TooltipMixin):
         percent = battery_service.get_percent()
         time = battery_service.get_time_remaining()
         capacity = battery_service.get_capacity()
+
+        if percent <= self.warning_level and status != "Charging":
+            subprocess.run(
+                [
+                    "dunstify",
+                    "-u",
+                    "critical",
+                    "-i",
+                    ASSETS_PATH + "battery-alert.svg",
+                    "Low Battery Level",
+                ],
+                text=True,
+                stderr=subprocess.DEVNULL,
+            )
 
         icon = next(icon for level, icon in self.icon_map if percent >= level)
 
