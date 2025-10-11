@@ -72,7 +72,7 @@ PILL_LINE_WIDTH = 0
 # Colors
 colors, special_colors = load_pywal_colors()
 
-WINDOW_BORDER_FOCUS_COLOR = special_colors["foreground"]
+WINDOW_BORDER_FOCUS_COLOR = colors["color2"]
 WINDOW_BORDER_NORMAL_COLOR = special_colors["background"]
 BAR_BACKGROUND = special_colors["background"]
 BAR_FOREGROUND = special_colors["foreground"]
