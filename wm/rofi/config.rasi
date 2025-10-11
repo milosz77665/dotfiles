@@ -1,0 +1,12 @@
+configuration {
+    font: "Hack Nerd Font 12";
+
+    modi: "drun,run,filebrowser";
+    show-icons: true;
+    display-drun: " Apps";
+    display-run: " Run";
+    display-filebrowser: " Files";
+}
+
+@import "~/.cache/wal/colors-rofi-dark.rasi"
+@import "~/.config/rofi/themes/wal-dark-rounded.rasi"
