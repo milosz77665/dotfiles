@@ -34,6 +34,9 @@ def _change_wallpaper_background():
     )
 
     subprocess.run(["qtile", "cmd-obj", "-o", "cmd", "-f", "reload_config"])
+    subprocess.run(["killall", "dunst"])
+    dunst_config_path = os.path.expanduser("~/.cache/wal/dunstrc")
+    subprocess.Popen(["dunst", "-conf", dunst_config_path])
 
 
 @lazy.function
