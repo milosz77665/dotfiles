@@ -1,3 +1,4 @@
+from pathlib import Path
 from libqtile.config import Group, Match
 import os
 from .utils.pywal import load_pywal_colors
@@ -22,6 +23,9 @@ BLUETOOTH_APP = "blueman-manager"
 AUDIO_APP = "pavucontrol"
 BACKLIGHT_NAME = "intel_backlight"
 ASSETS_PATH = os.path.expanduser("~/.dotfiles/wm/qtile/config_modules/assets/")
+
+# SDDM
+SDDM_CONFIG_FILE = Path.home() / ".local/share/sddm/themes/silent/configs/default.conf"
 
 # Autostart
 MONITOR_CONFIG_PATH = os.path.expanduser("~/.screenlayout/monitor_config.sh")
