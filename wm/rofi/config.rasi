@@ -1,7 +1,7 @@
 configuration {
     font: "Hack Nerd Font 12";
 
-    modi: "drun,run,filebrowser";
+    modi: "drun";
     show-icons: true;
     display-drun: " Apps";
     display-run: " Run";
