@@ -1,7 +1,6 @@
 from libqtile import hook
 import os
 import subprocess
-from libqtile.log_utils import logger
 
 from .variables import DEFAULT_WALLPAPER_PATH, MONITOR_CONFIG_PATH
 from .utils.touchpad import configure_touchpad
@@ -15,9 +14,6 @@ def autostart():
 
     # Touchpad configuration
     configure_touchpad()
-
-    # Notification Deamon
-    subprocess.Popen(["dunst"])
 
     # Networks
     # subprocess.Popen(["nm-applet"])
@@ -38,8 +34,16 @@ def autostart():
         else:
             subprocess.Popen(["feh", "--bg-fill", DEFAULT_WALLPAPER_PATH])
 
-            # Pywal
-            subprocess.Popen(["wal", "-i", DEFAULT_WALLPAPER_PATH])
+        # Pywal
+        wal_process = subprocess.run(["wal", "-i", DEFAULT_WALLPAPER_PATH])
+
+        if wal_process.returncode == 0:
+            subprocess.run(["killall", "dunst"])
+            subprocess.run(["wal", "-R"])
+
+            # Notification Deamon
+            dunst_config_path = os.path.expanduser("~/.cache/wal/dunstrc")
+            subprocess.Popen(["dunst", "-conf", dunst_config_path])
 
     # Picom
     if os.environ.get("XDG_SESSION_TYPE") != "wayland":
@@ -47,4 +51,4 @@ def autostart():
         subprocess.Popen(["picom", "--backend", "glx", "--vsync", "-b"])
 
     # Screensaver
-    subprocess.Popen(["xscreensaver", "-no-splash"])
+    # subprocess.Popen(["xscreensaver", "-no-splash"])
