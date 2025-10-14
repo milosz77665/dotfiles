@@ -5,7 +5,7 @@ from qtile_extras.popup import (
     PopupText,
 )
 
-from ..variables import BAR_FOREGROUND, BAR_BACKGROUND, ASSETS_PATH
+from ..variables import BAR_FOREGROUND, BAR_BACKGROUND, ASSETS_PATH, HIGH_DPI_MULTIPLIER
 
 
 class PowerMenuPopup:
@@ -48,13 +48,13 @@ class PowerMenuPopup:
 
         number_of_elements = len(popup_elements)
         number_of_margins_x = number_of_elements - 1
-        padding_x = 30
-        padding_y = 30
-        margin_x = 70
-        margin_y = 40
-        image_width = 100
-        image_height = 100
-        text_height = 30
+        padding_x = int(30 * HIGH_DPI_MULTIPLIER)
+        padding_y = int(30 * HIGH_DPI_MULTIPLIER)
+        margin_x = int(70 * HIGH_DPI_MULTIPLIER)
+        margin_y = int(40 * HIGH_DPI_MULTIPLIER)
+        image_width = int(100 * HIGH_DPI_MULTIPLIER)
+        image_height = int(100 * HIGH_DPI_MULTIPLIER)
+        text_height = int(30 * HIGH_DPI_MULTIPLIER)
         popup_width = (
             number_of_elements * image_width
             + 2 * padding_x
@@ -100,7 +100,7 @@ class PowerMenuPopup:
                     / number_of_elements,
                     height=text_height,
                     foreground=self.TEXT_COLOR,
-                    fontsize=16,
+                    fontsize=int(16 * HIGH_DPI_MULTIPLIER),
                     h_align="center",
                 ),
             )

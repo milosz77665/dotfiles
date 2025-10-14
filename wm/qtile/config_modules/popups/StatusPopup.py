@@ -1,6 +1,6 @@
 from qtile_extras.popup import PopupAbsoluteLayout, PopupText, PopupImage
 
-from ..variables import BAR_FOREGROUND, BAR_BACKGROUND, ASSETS_PATH
+from ..variables import BAR_FOREGROUND, BAR_BACKGROUND, ASSETS_PATH, HIGH_DPI_MULTIPLIER
 
 
 class StatusPopup:
@@ -38,12 +38,12 @@ class StatusPopup:
             filename = self.off_filename
             text = "Muted"
 
-        margin = 10
-        icon_width = 100
-        icon_height = 100
-        text_height = 30
-        padding_y = 20
-        padding_x = margin + padding_y + 20
+        margin = int(10 * HIGH_DPI_MULTIPLIER)
+        icon_width = int(100 * HIGH_DPI_MULTIPLIER)
+        icon_height = int(100 * HIGH_DPI_MULTIPLIER)
+        text_height = int(30 * HIGH_DPI_MULTIPLIER)
+        padding_y = int(20 * HIGH_DPI_MULTIPLIER)
+        padding_x = int(50 * HIGH_DPI_MULTIPLIER)
         popup_width = icon_width + 2 * padding_x
         popup_height = icon_height + text_height + 2 * padding_y + margin
 
@@ -66,7 +66,7 @@ class StatusPopup:
                 width=popup_width - 2 * padding_x,
                 height=text_height,
                 foreground=self.TEXT_COLOR,
-                fontsize=20,
+                fontsize=int(20 * HIGH_DPI_MULTIPLIER),
                 h_align="center",
             ),
         ]

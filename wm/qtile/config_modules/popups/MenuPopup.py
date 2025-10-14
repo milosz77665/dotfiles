@@ -4,7 +4,7 @@ from qtile_extras import widget
 import threading
 import subprocess
 
-from ..variables import BAR_FOREGROUND, BAR_BACKGROUND, ASSETS_PATH
+from ..variables import BAR_FOREGROUND, BAR_BACKGROUND, ASSETS_PATH, HIGH_DPI_MULTIPLIER
 from ..services.BatteryService import battery_service
 from ..services.BluetoothService import bt_service
 from ..services.BrightnessService import brightness_service
@@ -164,27 +164,29 @@ class MenuPopup:
         mic_text, mic_filename = self._get_mic_data()
         brightness_text = self._get_brightness_data()
 
-        icon_width = 25
-        list_offset = 40
-        image_height = 30
+        icon_width = int(25 * HIGH_DPI_MULTIPLIER)
+        list_offset = int(40 * HIGH_DPI_MULTIPLIER)
+        image_height = int(30 * HIGH_DPI_MULTIPLIER)
         section_height = image_height
         text_width = 70
-        margin_x = 10
-        margin_y = 20
-        list_margin_y = 5
-        padding_y = 20
-        padding_x = 20
-        popup_width = 400
+        margin_x = int(10 * HIGH_DPI_MULTIPLIER)
+        margin_y = int(20 * HIGH_DPI_MULTIPLIER)
+        list_margin_y = int(5 * HIGH_DPI_MULTIPLIER)
+        padding_y = int(20 * HIGH_DPI_MULTIPLIER)
+        padding_x = int(20 * HIGH_DPI_MULTIPLIER)
+        popup_width = int(400 * HIGH_DPI_MULTIPLIER)
         bt_extra_height = self._calculate_bt_extra_height(section_height)
         wlan_extra_height = self._calculate_wlan_extra_height(section_height)
         bt_connected_extra = 0
 
         controls.append(
             PopupWidget(
-                widget=widget.Clock(format="%H:%M:%S %d.%m.%Y", fontsize=25),
-                pos_x=popup_width // 2 - 300 // 2,
+                widget=widget.Clock(
+                    format="%H:%M:%S %d.%m.%Y", fontsize=int(25 * HIGH_DPI_MULTIPLIER)
+                ),
+                pos_x=popup_width // 2 - int(300 * HIGH_DPI_MULTIPLIER) // 2,
                 pos_y=padding_y,
-                width=300,
+                width=int(300 * HIGH_DPI_MULTIPLIER),
                 height=section_height,
                 h_align="center",
                 v_align="middle",
@@ -212,7 +214,7 @@ class MenuPopup:
                     pos_y=wlan_section_pos_y,
                     width=icon_width,
                     height=section_height,
-                    fontsize=12,
+                    fontsize=int(12 * HIGH_DPI_MULTIPLIER),
                     can_focus=True,
                     foreground=self.TEXT_COLOR,
                     highlight=self.HIGHLIGHT_COLOR,
@@ -230,7 +232,7 @@ class MenuPopup:
                     pos_y=wlan_section_pos_y,
                     width=icon_width,
                     height=section_height,
-                    fontsize=18,
+                    fontsize=int(18 * HIGH_DPI_MULTIPLIER),
                     can_focus=True,
                     foreground=self.TEXT_COLOR,
                     highlight=self.HIGHLIGHT_COLOR,
@@ -249,7 +251,7 @@ class MenuPopup:
                     width=(popup_width - 2 * padding_x - 2 * margin_x - 2 * icon_width)
                     / 2,
                     height=section_height,
-                    fontsize=16,
+                    fontsize=int(16 * HIGH_DPI_MULTIPLIER),
                     can_focus=True,
                     foreground=self.TEXT_COLOR,
                     highlight=self.HIGHLIGHT_COLOR,
@@ -272,7 +274,7 @@ class MenuPopup:
                     / 2,
                     height=section_height,
                     foreground=self.TEXT_COLOR,
-                    fontsize=16,
+                    fontsize=int(16 * HIGH_DPI_MULTIPLIER),
                     h_align="center",
                     v_align="middle",
                 )
@@ -289,7 +291,7 @@ class MenuPopup:
                             pos_y=wlan_list_pos_y,
                             width=popup_width - 2 * padding_x - 40,
                             height=section_height,
-                            fontsize=14,
+                            fontsize=int(14 * HIGH_DPI_MULTIPLIER),
                             foreground=self.TEXT_COLOR,
                             h_align="left",
                             v_align="middle",
@@ -317,7 +319,7 @@ class MenuPopup:
                                 + i * (section_height + list_margin_y),
                                 width=popup_width - 2 * padding_x - list_offset,
                                 height=section_height,
-                                fontsize=14,
+                                fontsize=int(14 * HIGH_DPI_MULTIPLIER),
                                 can_focus=True,
                                 foreground=self.TEXT_COLOR,
                                 highlight=self.HIGHLIGHT_COLOR,
@@ -341,7 +343,7 @@ class MenuPopup:
                                 pos_y=wlan_list_pos_y,
                                 width=20,
                                 height=20,
-                                fontsize=14,
+                                fontsize=int(14 * HIGH_DPI_MULTIPLIER),
                                 can_focus=True,
                                 foreground=self.TEXT_COLOR,
                                 highlight=self.HIGHLIGHT_COLOR,
@@ -360,7 +362,7 @@ class MenuPopup:
                                 pos_y=wlan_list_pos_y + 25,
                                 width=20,
                                 height=20,
-                                fontsize=14,
+                                fontsize=int(14 * HIGH_DPI_MULTIPLIER),
                                 can_focus=True,
                                 foreground=self.TEXT_COLOR,
                                 highlight=self.HIGHLIGHT_COLOR,
@@ -379,7 +381,7 @@ class MenuPopup:
                     pos_y=wlan_section_pos_y,
                     width=popup_width - 2 * padding_x,
                     height=section_height,
-                    fontsize=18,
+                    fontsize=int(18 * HIGH_DPI_MULTIPLIER),
                     can_focus=True,
                     foreground=self.TEXT_COLOR,
                     highlight=self.HIGHLIGHT_COLOR,
@@ -409,7 +411,7 @@ class MenuPopup:
                     pos_y=bt_section_pos_y,
                     width=icon_width,
                     height=section_height,
-                    fontsize=12,
+                    fontsize=int(12 * HIGH_DPI_MULTIPLIER),
                     can_focus=True,
                     foreground=self.TEXT_COLOR,
                     highlight=self.HIGHLIGHT_COLOR,
@@ -427,7 +429,7 @@ class MenuPopup:
                     pos_y=bt_section_pos_y,
                     width=icon_width,
                     height=section_height,
-                    fontsize=18,
+                    fontsize=int(18 * HIGH_DPI_MULTIPLIER),
                     can_focus=True,
                     foreground=self.TEXT_COLOR,
                     highlight=self.HIGHLIGHT_COLOR,
@@ -450,7 +452,7 @@ class MenuPopup:
                             width=popup_width
                             - (2 * padding_x + 2 * margin_x + 2 * icon_width),
                             height=section_height,
-                            fontsize=16,
+                            fontsize=int(16 * HIGH_DPI_MULTIPLIER),
                             h_align="center",
                             v_align="middle",
                             can_focus=True,
@@ -483,7 +485,7 @@ class MenuPopup:
                             pos_y=bt_list_pos_y,
                             width=popup_width - 2 * padding_x - list_offset,
                             height=section_height,
-                            fontsize=14,
+                            fontsize=int(14 * HIGH_DPI_MULTIPLIER),
                             foreground=self.TEXT_COLOR,
                             h_align="left",
                             v_align="middle",
@@ -505,7 +507,7 @@ class MenuPopup:
                                 + i * (section_height + list_margin_y),
                                 width=popup_width - 2 * padding_x - list_offset,
                                 height=section_height,
-                                fontsize=14,
+                                fontsize=int(14 * HIGH_DPI_MULTIPLIER),
                                 can_focus=True,
                                 foreground=self.TEXT_COLOR,
                                 highlight=self.HIGHLIGHT_COLOR,
@@ -527,7 +529,7 @@ class MenuPopup:
                                 pos_y=bt_list_pos_y,
                                 width=20,
                                 height=20,
-                                fontsize=14,
+                                fontsize=int(14 * HIGH_DPI_MULTIPLIER),
                                 can_focus=True,
                                 foreground=self.TEXT_COLOR,
                                 highlight=self.HIGHLIGHT_COLOR,
@@ -546,7 +548,7 @@ class MenuPopup:
                                 pos_y=bt_list_pos_y + 25,
                                 width=20,
                                 height=20,
-                                fontsize=14,
+                                fontsize=int(14 * HIGH_DPI_MULTIPLIER),
                                 can_focus=True,
                                 foreground=self.TEXT_COLOR,
                                 highlight=self.HIGHLIGHT_COLOR,
@@ -566,7 +568,7 @@ class MenuPopup:
                     pos_y=bt_section_pos_y,
                     width=popup_width - 2 * padding_x,
                     height=section_height,
-                    fontsize=18,
+                    fontsize=int(18 * HIGH_DPI_MULTIPLIER),
                     can_focus=True,
                     foreground=self.TEXT_COLOR,
                     highlight=self.HIGHLIGHT_COLOR,
@@ -620,7 +622,7 @@ class MenuPopup:
                 pos_y=value_section_pos_y,
                 width=section_width,
                 height=section_height,
-                fontsize=16,
+                fontsize=int(16 * HIGH_DPI_MULTIPLIER),
                 foreground=self.TEXT_COLOR,
                 h_align="center",
                 v_align="middle",
@@ -657,7 +659,7 @@ class MenuPopup:
                 pos_y=value_section_pos_y,
                 width=section_width,
                 height=section_height,
-                fontsize=16,
+                fontsize=int(16 * HIGH_DPI_MULTIPLIER),
                 foreground=self.TEXT_COLOR,
                 h_align="center",
                 v_align="middle",
@@ -683,7 +685,7 @@ class MenuPopup:
                 highlight=self.HIGHLIGHT_COLOR,
                 highlight_method="border",
                 highlight_border=0.5,
-                fontsize=30,
+                fontsize=int(30 * HIGH_DPI_MULTIPLIER),
                 h_align="center",
                 v_align="middle",
                 mouse_callbacks={"Button1": self.airplane_mode_toggle},
@@ -697,7 +699,7 @@ class MenuPopup:
                 pos_y=value_section_pos_y,
                 width=section_width,
                 height=section_height,
-                fontsize=16,
+                fontsize=int(16 * HIGH_DPI_MULTIPLIER),
                 foreground=self.TEXT_COLOR,
                 h_align="center",
                 v_align="middle",
@@ -738,7 +740,7 @@ class MenuPopup:
                 highlight=self.HIGHLIGHT_COLOR,
                 highlight_method="border",
                 highlight_border=0.5,
-                fontsize=16,
+                fontsize=int(16 * HIGH_DPI_MULTIPLIER),
                 h_align="center",
                 v_align="middle",
             ),
@@ -751,7 +753,7 @@ class MenuPopup:
                 pos_y=second_value_section_pos_y,
                 width=section_width,
                 height=section_height,
-                fontsize=14,
+                fontsize=int(14 * HIGH_DPI_MULTIPLIER),
                 foreground=self.TEXT_COLOR,
                 h_align="center",
                 v_align="middle",
@@ -786,7 +788,7 @@ class MenuPopup:
                 pos_y=second_value_section_pos_y,
                 width=section_width,
                 height=section_height,
-                fontsize=16,
+                fontsize=int(16 * HIGH_DPI_MULTIPLIER),
                 foreground=self.TEXT_COLOR,
                 h_align="center",
                 v_align="middle",

@@ -23,6 +23,7 @@ BLUETOOTH_APP = "blueman-manager"
 AUDIO_APP = "pavucontrol"
 BACKLIGHT_NAME = "intel_backlight"
 ASSETS_PATH = os.path.expanduser("~/.dotfiles/wm/qtile/config_modules/assets/")
+HIGH_DPI_MULTIPLIER = 1
 
 # SDDM
 SDDM_CONFIG_FILE = Path.home() / ".local/share/sddm/themes/silent/configs/default.conf"
@@ -59,13 +60,13 @@ WINDOWS_MARGIN = 0
 WINDOWS_BORDER = 3
 
 # Widgets
-BAR_HEIGHT = 25
+BAR_HEIGHT = int(25 * HIGH_DPI_MULTIPLIER)
 BAR_MARGIN = [0, 0, 0, 0]
 FONT = "Hack Nerd Font"
-FONTSIZE = 14
-GROUPS_CIRCLES_SIZE = 20
-PADDING = 4
-GROUPS_PADDING = 6
+FONTSIZE = int(14 * HIGH_DPI_MULTIPLIER)
+GROUPS_CIRCLES_SIZE = int(20 * HIGH_DPI_MULTIPLIER)
+PADDING = int(4 * HIGH_DPI_MULTIPLIER)
+GROUPS_PADDING = int(6 * HIGH_DPI_MULTIPLIER)
 BACKLIGHT_STEP = 2.0
 UPDATE_INTERVAL = 12.0
 FAST_UPDATE_INTERVAL = 5.0

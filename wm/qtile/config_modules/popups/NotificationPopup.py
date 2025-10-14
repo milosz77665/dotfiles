@@ -1,5 +1,5 @@
 from qtile_extras.popup import PopupText, PopupAbsoluteLayout
-from ..variables import BAR_BACKGROUND, BAR_FOREGROUND
+from ..variables import BAR_BACKGROUND, BAR_FOREGROUND, HIGH_DPI_MULTIPLIER
 from ..services.NotificationService import notification_service
 
 
@@ -38,12 +38,12 @@ class NotificationPopup:
         controls = []
         notifications = notification_service.get_notifications()
 
-        padding = 15
-        popup_width = 350
-        header_height = 20
-        item_height = 50
-        button_width = 25
-        text_to_button_gap = 10
+        padding = int(15 * HIGH_DPI_MULTIPLIER)
+        popup_width = int(350 * HIGH_DPI_MULTIPLIER)
+        header_height = int(20 * HIGH_DPI_MULTIPLIER)
+        item_height = int(50 * HIGH_DPI_MULTIPLIER)
+        button_width = int(25 * HIGH_DPI_MULTIPLIER)
+        text_to_button_gap = int(10 * HIGH_DPI_MULTIPLIER)
 
         controls.append(
             PopupText(
@@ -53,7 +53,7 @@ class NotificationPopup:
                 width=popup_width - (padding * 3) - button_width,
                 height=header_height,
                 h_align="left",
-                fontsize=14,
+                fontsize=int(14 * HIGH_DPI_MULTIPLIER),
                 foreground=self.COLOR_FOREGROUND,
             )
         )
@@ -65,7 +65,7 @@ class NotificationPopup:
                 pos_y=padding,
                 width=button_width,
                 height=header_height,
-                fontsize=14,
+                fontsize=int(14 * HIGH_DPI_MULTIPLIER),
                 foreground=self.COLOR_FOREGROUND,
                 can_focus=True,
                 highlight_method="border",
@@ -83,6 +83,7 @@ class NotificationPopup:
             controls.append(
                 PopupText(
                     text="No new notifications",
+                    fontsize=int(14 * HIGH_DPI_MULTIPLIER),
                     pos_x=padding,
                     pos_y=current_y,
                     width=popup_width - 2 * padding,
@@ -106,6 +107,7 @@ class NotificationPopup:
                         pos_y=y + 5,
                         width=text_width,
                         height=20,
+                        fontsize=int(14 * HIGH_DPI_MULTIPLIER),
                         can_focus=True,
                         highlight=self.HIGHLIGHT_COLOR,
                         highlight_method="border",
@@ -129,6 +131,7 @@ class NotificationPopup:
                         text=body_text,
                         pos_x=padding,
                         pos_y=y + 30,
+                        fontsize=int(14 * HIGH_DPI_MULTIPLIER),
                         width=text_width,
                         height=15,
                         h_align="left",
@@ -144,6 +147,7 @@ class NotificationPopup:
                         width=button_width,
                         height=header_height,
                         foreground=self.COLOR_FOREGROUND,
+                        fontsize=int(14 * HIGH_DPI_MULTIPLIER),
                         can_focus=True,
                         highlight=self.HIGHLIGHT_COLOR,
                         highlight_method="border",

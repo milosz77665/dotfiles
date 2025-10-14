@@ -2,7 +2,7 @@ import calendar
 from datetime import datetime, date
 from qtile_extras.popup import PopupText, PopupAbsoluteLayout
 
-from ..variables import BAR_BACKGROUND, BAR_FOREGROUND
+from ..variables import BAR_BACKGROUND, BAR_FOREGROUND, HIGH_DPI_MULTIPLIER
 
 EN_MONTHS = [
     "",
@@ -83,14 +83,14 @@ class CalendarPopup:
         weeks = self._get_month_days(self.displayed_year, self.displayed_month)
         rows_count = len(weeks)
 
-        padding_x = 10
-        padding_y = 15
-        margin = 15
-        bigger_margin = 25
+        padding_x = int(10 * HIGH_DPI_MULTIPLIER)
+        padding_y = int(15 * HIGH_DPI_MULTIPLIER)
+        margin = int(15 * HIGH_DPI_MULTIPLIER)
+        bigger_margin = int(25 * HIGH_DPI_MULTIPLIER)
 
-        header_height = 20
-        weekdays_height = 10
-        week_row_height = 10
+        header_height = int(20 * HIGH_DPI_MULTIPLIER)
+        weekdays_height = int(10 * HIGH_DPI_MULTIPLIER)
+        week_row_height = int(10 * HIGH_DPI_MULTIPLIER)
         popup_height = (
             (rows_count - 1) * (week_row_height + margin)
             + 2 * padding_y
@@ -100,8 +100,8 @@ class CalendarPopup:
             + week_row_height
         )
 
-        popup_width = 220
-        button_width = 35
+        popup_width = int(220 * HIGH_DPI_MULTIPLIER)
+        button_width = int(35 * HIGH_DPI_MULTIPLIER)
         month_year_title_width = popup_width - 2 * button_width
 
         month_name = EN_MONTHS[self.displayed_month]
@@ -113,7 +113,7 @@ class CalendarPopup:
                 pos_y=padding_y,
                 width=month_year_title_width,
                 height=header_height,
-                fontsize=14,
+                fontsize=int(14 * HIGH_DPI_MULTIPLIER),
                 h_align="center",
                 foreground=self.COLOR_FOREGROUND,
             )
@@ -127,7 +127,7 @@ class CalendarPopup:
                 pos_y=padding_y,
                 width=button_width,
                 height=header_height,
-                fontsize=14,
+                fontsize=int(14 * HIGH_DPI_MULTIPLIER),
                 h_align="center",
                 foreground=self.COLOR_FOREGROUND,
                 mouse_callbacks={"Button1": self.prev_month},
@@ -146,7 +146,7 @@ class CalendarPopup:
                 pos_y=padding_y,
                 width=button_width,
                 height=header_height,
-                fontsize=14,
+                fontsize=int(14 * HIGH_DPI_MULTIPLIER),
                 h_align="center",
                 foreground=self.COLOR_FOREGROUND,
                 mouse_callbacks={"Button1": self.next_month},
@@ -164,6 +164,7 @@ class CalendarPopup:
                 PopupText(
                     name=f"wd_{i}",
                     text=wd,
+                    fontsize=int(14 * HIGH_DPI_MULTIPLIER),
                     pos_x=padding_x + i * ((popup_width - 2 * padding_x) / 7.0),
                     pos_y=padding_y + bigger_margin + header_height,
                     width=(popup_width - 2 * padding_x) / 7,
@@ -180,6 +181,7 @@ class CalendarPopup:
                 ctrl = PopupText(
                     name=name,
                     text=text,
+                    fontsize=int(14 * HIGH_DPI_MULTIPLIER),
                     pos_x=padding_x + c * ((popup_width - 2 * padding_x) / 7.0),
                     pos_y=padding_y
                     + 2 * bigger_margin
