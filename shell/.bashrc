@@ -48,6 +48,10 @@ export NVM_DIR="$HOME/.nvm"
 eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 
 # Atuin
+if [ -f ~/.bash-preexec.sh ]; then
+  source ~/.bash-preexec.sh
+fi
+
 export PATH="$HOME/.atuin/bin:$PATH"
 eval "$(atuin init bash --disable-up-arrow)"
 
