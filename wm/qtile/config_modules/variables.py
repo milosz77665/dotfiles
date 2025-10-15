@@ -103,8 +103,12 @@ TOOLTIP_DEFAULTS = [
         "Font colur for tooltop",
     ),
     ("tooltip_font", FONT, "Font family for tooltop"),
-    ("tooltip_fontsize", 15, "Font size for tooltop"),
-    ("tooltip_padding", 10, "int for all sides or list for [top/bottom, left/right]"),
+    ("tooltip_fontsize", int(15 * HIGH_DPI_MULTIPLIER), "Font size for tooltop"),
+    (
+        "tooltip_padding",
+        int(10 * HIGH_DPI_MULTIPLIER),
+        "int for all sides or list for [top/bottom, left/right]",
+    ),
 ]
 
 
