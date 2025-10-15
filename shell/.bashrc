@@ -52,6 +52,9 @@ if [ -f ~/.bash-preexec.sh ]; then
   source ~/.bash-preexec.sh
 fi
 
+# Visual Studio Code keyring issue
+alias code='code --password-store="gnome-libsecret"'
+
 export PATH="$HOME/.atuin/bin:$PATH"
 eval "$(atuin init bash --disable-up-arrow)"
 
