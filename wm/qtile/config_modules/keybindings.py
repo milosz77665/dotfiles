@@ -94,7 +94,7 @@ keys = [
         desc="Toggle notification popup",
     ),
     Key(
-        [],
+        [MOD],
         "Escape",
         lazy.function(close_all_popups),
         desc="Close all popups",
@@ -175,6 +175,16 @@ keys = [
     Key(
         [],
         "XF86AudioMicMute",
+        lazy.function(
+            lambda qtile: run_service_function(
+                toggle_mute_and_show_status, qtile, "mic"
+            )
+        ),
+        desc="Toggle mic mute",
+    ),
+    Key(
+        ["mod1"],
+        "XF86AudioMute",
         lazy.function(
             lambda qtile: run_service_function(
                 toggle_mute_and_show_status, qtile, "mic"
