@@ -25,6 +25,7 @@ def autostart():
 
     # Wallpaper
     if os.path.exists(DEFAULT_WALLPAPER_PATH):
+        subprocess.Popen(["betterlockscreen", "-u", DEFAULT_WALLPAPER_PATH])
         if os.environ.get("XDG_SESSION_TYPE") == "wayland":
             subprocess.Popen(["swaybg", "-i", DEFAULT_WALLPAPER_PATH])
         else:

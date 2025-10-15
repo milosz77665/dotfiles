@@ -305,7 +305,7 @@ keys = [
     Key(
         [MOD, "mod1"],
         "l",
-        lazy.spawn("xscreensaver-command -lock"),
+        lazy.spawn("betterlockscreen -l"),
         desc="Lock the screen",
     ),
     ##############################
