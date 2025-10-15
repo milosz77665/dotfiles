@@ -15,6 +15,11 @@ def autostart():
     # Touchpad configuration
     configure_touchpad()
 
+    # Picom
+    if os.environ.get("XDG_SESSION_TYPE") != "wayland":
+        subprocess.Popen(["pkill", "picom"])
+        subprocess.Popen(["picom", "--backend", "glx", "--vsync", "-b"])
+
     # Udiskie automount
     subprocess.Popen(["udiskie", "-t", "-a"])
 
@@ -44,11 +49,6 @@ def autostart():
             # Notification Deamon
             dunst_config_path = os.path.expanduser("~/.cache/wal/dunstrc")
             subprocess.Popen(["dunst", "-conf", dunst_config_path])
-
-    # Picom
-    if os.environ.get("XDG_SESSION_TYPE") != "wayland":
-        subprocess.Popen(["pkill", "picom"])
-        subprocess.Popen(["picom", "--backend", "glx", "--vsync", "-b"])
 
     # Screensaver
     # subprocess.Popen(["xscreensaver", "-no-splash"])
