@@ -15,17 +15,13 @@ def autostart():
     # Touchpad configuration
     configure_touchpad()
 
-    # Networks
-    # subprocess.Popen(["nm-applet"])
+    # Gnome keyring
+    subprocess.Popen(
+        ["/usr/bin/gnome-keyring-daemon", "--start", "--components=secrets,ssh"]
+    )
 
-    # Bluetooth
-    # subprocess.Popen(["blueman-applet"])
-
-    # Policy Agent
-    if os.path.exists("/usr/lib/policykit-1-gnome/polkit-gnome-authentication-agent-1"):
-        subprocess.Popen(
-            ["/usr/lib/policykit-1-gnome/polkit-gnome-authentication-agent-1"]
-        )
+    # Policy kit
+    subprocess.Popen(["lxpolkit"])
 
     # Wallpaper
     if os.path.exists(DEFAULT_WALLPAPER_PATH):
