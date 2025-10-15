@@ -15,6 +15,9 @@ def autostart():
     # Touchpad configuration
     configure_touchpad()
 
+    # Udiskie automount
+    subprocess.Popen(["udiskie", "-t", "-a"])
+
     # Gnome keyring
     subprocess.Popen(
         ["/usr/bin/gnome-keyring-daemon", "--start", "--components=secrets,ssh"]
