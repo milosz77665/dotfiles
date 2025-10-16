@@ -13,7 +13,8 @@ class BatteryWidget(base.ThreadPoolText, TooltipMixin):
         self.add_defaults(TooltipMixin.defaults)
         self.add_defaults(TOOLTIP_DEFAULTS)
         self.update_interval = FAST_UPDATE_INTERVAL
-        self.warning_level = 25
+        self.low_warning_level = 25
+        self.high_warning_level = 81
         self.icon_map = [
             (100, "󰁹"),
             (90, "󰂂"),
@@ -34,7 +35,7 @@ class BatteryWidget(base.ThreadPoolText, TooltipMixin):
         time = battery_service.get_time_remaining()
         capacity = battery_service.get_capacity()
 
-        if percent <= self.warning_level and status != "Charging":
+        if percent <= self.low_warning_level and status != "Charging":
             subprocess.run(
                 [
                     "dunstify",
@@ -43,6 +44,19 @@ class BatteryWidget(base.ThreadPoolText, TooltipMixin):
                     "-i",
                     ASSETS_PATH + "battery-alert.svg",
                     "Low Battery Level",
+                ],
+                text=True,
+                stderr=subprocess.DEVNULL,
+            )
+        elif percent >= self.high_warning_level and status == "Charging":
+            subprocess.run(
+                [
+                    "dunstify",
+                    "-u",
+                    "critical",
+                    "-i",
+                    ASSETS_PATH + "battery-full.svg",
+                    f"Battery is over {self.high_warning_level}%. Unplug charger to save battery health",
                 ],
                 text=True,
                 stderr=subprocess.DEVNULL,
