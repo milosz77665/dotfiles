@@ -31,6 +31,18 @@ unset color_prompt force_color_prompt
 
 export PATH="$HOME/.local/bin:$PATH"
 
+if ! shopt -oq posix; then
+  if [ -f /usr/share/bash-completion/bash_completion ]; then
+    . /usr/share/bash-completion/bash_completion
+  elif [ -f /etc/bash_completion ]; then
+    . /etc/bash_completion
+  fi
+fi
+
+if [ -f ~/.bashrc.local ]; then
+    . ~/.bashrc.local
+fi
+
 # Pyenv
 export PYENV_ROOT="$HOME/.pyenv"
 export PATH="$PYENV_ROOT/bin:$PATH"
@@ -47,25 +59,26 @@ export NVM_DIR="$HOME/.nvm"
 # Homebrew
 eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 
+# Yazi
+function y() {
+	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
+	yazi "$@" --cwd-file="$tmp"
+	IFS= read -r -d '' cwd < "$tmp"
+	[ -n "$cwd" ] && [ "$cwd" != "$PWD" ] && builtin cd -- "$cwd"
+	rm -f -- "$tmp"
+}
+
 # Atuin
 if [ -f ~/.bash-preexec.sh ]; then
   source ~/.bash-preexec.sh
 fi
 
-# Visual Studio Code keyring issue
-alias code='code --password-store="gnome-libsecret"'
-
 export PATH="$HOME/.atuin/bin:$PATH"
 eval "$(atuin init bash --disable-up-arrow)"
 
-if ! shopt -oq posix; then
-  if [ -f /usr/share/bash-completion/bash_completion ]; then
-    . /usr/share/bash-completion/bash_completion
-  elif [ -f /etc/bash_completion ]; then
-    . /etc/bash_completion
-  fi
-fi
 
-if [ -f ~/.bashrc.local ]; then
-    . ~/.bashrc.local
-fi
+# Visual Studio Code keyring issue
+alias code='code --password-store="gnome-libsecret"'
+
+# Obsidian alias
+alias obsidian='flatpak run md.obsidian.Obsidian'
