@@ -17,7 +17,6 @@ def autostart():
 
     # Picom
     if os.environ.get("XDG_SESSION_TYPE") != "wayland":
-        subprocess.Popen(["pkill", "picom"])
         subprocess.Popen(["picom", "--backend", "glx", "--vsync", "-b"])
 
     # Udiskie automount
