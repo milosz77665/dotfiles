@@ -75,12 +75,18 @@ def get_widget_list(is_primary=False):
         ),
         widget.CurrentLayout(scale=0.6),
         widget.Spacer(),
-        widget.Mpris2(
-            name="music_player",
-            width=200,
-            scroll=True,
-            scroll_interval=0.03,
-            scroll_repeat=True,
+        widget.WidgetBox(
+            text_closed="",
+            text_open="",
+            widgets=[
+                widget.Mpris2(
+                    name="music_player",
+                    width=200,
+                    scroll=True,
+                    scroll_interval=0.03,
+                    scroll_repeat=True,
+                ),
+            ],
         ),
         (widget.Systray() if is_primary else widget.Spacer(length=0)),
         widget.Spacer(length=10),

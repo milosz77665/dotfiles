@@ -94,6 +94,12 @@ keys = [
         desc="Toggle notification popup",
     ),
     Key(
+        ["control", "mod1"],
+        "h",
+        lazy.widget["widgetbox"].toggle(),
+        desc="Toggle mpris2",
+    ),
+    Key(
         [MOD],
         "Escape",
         lazy.function(close_all_popups),
