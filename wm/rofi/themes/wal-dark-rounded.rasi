@@ -143,7 +143,7 @@ element-text {
 }
 
 mode-switcher{
-    enabled:                        true;
+    enabled:                        false;
     spacing:                        10px;
     margin:                         0px;
     padding:                        0px;
