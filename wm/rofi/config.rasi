@@ -4,8 +4,6 @@ configuration {
     modi: "drun";
     show-icons: true;
     display-drun: " Apps";
-    display-run: " Run";
-    display-filebrowser: " Files";
 }
 
 @import "~/.cache/wal/colors-rofi-dark.rasi"
