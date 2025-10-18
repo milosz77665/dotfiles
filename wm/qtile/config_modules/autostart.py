@@ -1,3 +1,4 @@
+import shutil
 from libqtile import hook
 import os
 import subprocess
@@ -20,7 +21,8 @@ def autostart():
         subprocess.Popen(["picom", "--backend", "glx", "--vsync", "-b"])
 
     # Udiskie automount
-    subprocess.Popen(["udiskie", "-t", "-a"])
+    if shutil.which("udiskie"):
+        subprocess.Popen(["udiskie", "-t", "-a"])
 
     # Gnome keyring
     subprocess.Popen(
@@ -28,7 +30,8 @@ def autostart():
     )
 
     # Policy kit
-    subprocess.Popen(["lxpolkit"])
+    if shutil.which("lxpolkit"):
+        subprocess.Popen(["lxpolkit"])
 
     # Wallpaper
     if os.path.exists(DEFAULT_WALLPAPER_PATH):
